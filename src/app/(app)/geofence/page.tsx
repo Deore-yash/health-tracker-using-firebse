@@ -26,7 +26,7 @@ export default function GeoFencePage() {
           <CardHeader>
             <CardTitle className="font-headline">Your Safe Zones</CardTitle>
             <CardDescription>
-              Manage the geo-fenced areas for alerts.
+              Manage the geo-fenced areas for tour alerts.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -55,21 +55,21 @@ export default function GeoFencePage() {
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">Add New Zone</CardTitle>
-            <CardDescription>Define a new safe area.</CardDescription>
+            <CardDescription>Define a new safe area for your tour group.</CardDescription>
           </CardHeader>
           <CardContent>
             <form className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="zone-name">Zone Name</Label>
-                <Input id="zone-name" placeholder="e.g., Home, Park" />
+                <Input id="zone-name" placeholder="e.g., Hotel, Museum District" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="zone-address">Address</Label>
+                <Label htmlFor="zone-address">Address or Landmark</Label>
                 <Input id="zone-address" placeholder="123 Main St, Anytown" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="zone-radius">Radius (meters)</Label>
-                <Input id="zone-radius" type="number" placeholder="100" />
+                <Input id="zone-radius" type="number" placeholder="200" />
               </div>
               <Button type="submit" className="w-full">
                 Add Zone

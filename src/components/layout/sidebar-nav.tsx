@@ -4,13 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
-  HeartPulse,
   MapPin,
   MessageCircle,
   Users,
-  User,
   LogOut,
-  LifeBuoy,
+  ListChecks,
 } from 'lucide-react';
 import {
   SidebarHeader,
@@ -22,7 +20,7 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { Icons } from '@/components/icons';
-import { user } from '@/lib/data';
+import { tourist } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
@@ -34,19 +32,24 @@ const links = [
     label: 'Dashboard',
   },
   {
+    href: '/itinerary',
+    icon: ListChecks,
+    label: 'Itinerary',
+  },
+  {
     href: '/geofence',
     icon: MapPin,
-    label: 'Geo-Fence',
+    label: 'Safe Zones',
   },
   {
     href: '/chatbot',
     icon: MessageCircle,
-    label: 'AI Health Chatbot',
+    label: 'AI Assistant',
   },
   {
     href: '/caregiver',
     icon: Users,
-    label: 'Caregivers',
+    label: 'Tour Guides',
   },
 ];
 
@@ -59,7 +62,7 @@ export function SidebarNav() {
         <div className="flex items-center gap-2 p-2">
           <Icons.logo className="h-8 w-auto text-primary" />
           <span className="font-headline text-2xl font-semibold text-foreground">
-            GuardianLife
+            TourSecure
           </span>
         </div>
       </SidebarHeader>
@@ -92,18 +95,18 @@ export function SidebarNav() {
               )}
             >
               <Avatar className="h-8 w-8">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={tourist.avatar} alt={tourist.name} />
                 <AvatarFallback>
-                  {user.name
+                  {tourist.name
                     .split(' ')
                     .map((n) => n[0])
                     .join('')}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                <span className="font-semibold">{user.name}</span>
+                <span className="font-semibold">{tourist.name}</span>
                 <span className="text-xs text-muted-foreground">
-                  {user.email}
+                  {tourist.email}
                 </span>
               </div>
             </div>

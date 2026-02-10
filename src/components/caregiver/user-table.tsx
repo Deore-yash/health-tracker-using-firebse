@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { registeredUsers } from '@/lib/data';
+import { monitoredTourists } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { MapPin, Activity } from 'lucide-react';
 
@@ -23,24 +23,24 @@ export function UserTable() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Registered Users</CardTitle>
+        <CardTitle>Monitored Tourists</CardTitle>
         <CardDescription>
-          Monitor the health and location of your assigned users.
+          Track the status and location of your assigned tourists.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>User</TableHead>
+              <TableHead>Tourist</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Last Heart Rate</TableHead>
+              <TableHead>Current Activity</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {registeredUsers.map((user) => (
-              <TableRow key={user.id}>
+            {monitoredTourists.map((user) => (
+              <TableRow key={user.id} className="transition-all hover:bg-muted/50">
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <Avatar>
@@ -56,13 +56,13 @@ export function UserTable() {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="secondary">Normal</Badge>
+                  <Badge variant={user.status === 'Safe' ? 'secondary' : 'destructive'}>{user.status}</Badge>
                 </TableCell>
-                <TableCell>72 bpm</TableCell>
+                <TableCell>{user.currentActivity}</TableCell>
                 <TableCell className="text-right space-x-2">
                   <Button variant="outline" size="sm">
                     <Activity className="mr-2 h-4 w-4"/>
-                    Health Summary
+                    View Details
                   </Button>
                   <Button variant="outline" size="sm">
                     <MapPin className="mr-2 h-4 w-4"/>

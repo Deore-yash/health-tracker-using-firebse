@@ -3,12 +3,12 @@
 import Link from 'next/link';
 import {
   Bell,
-  Home,
   LifeBuoy,
   LogOut,
   Search,
   Settings,
   User,
+  ShieldAlert,
 } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -29,9 +29,31 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { notifications, user as userData } from '@/lib/data';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { notifications, tourist as touristData } from '@/lib/data';
+import { useToast } from '@/hooks/use-toast';
 
 export function Header() {
+  const { toast } = useToast();
+
+  const handleSos = () => {
+    toast({
+      title: 'SOS Alert Sent!',
+      description: 'Your tour guide and emergency contacts have been notified.',
+      variant: 'destructive',
+    });
+  };
+
   return (
     <header className="flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6 sticky top-0 z-30">
       <SidebarTrigger className="md:hidden" />
@@ -41,16 +63,38 @@ export function Header() {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search..."
+              placeholder="Search itinerary, places..."
               className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
             />
           </div>
         </form>
       </div>
-      <Button variant="ghost" size="icon" className="rounded-full text-accent">
-        <LifeBuoy className="h-6 w-6" />
-        <span className="sr-only">SOS</span>
-      </Button>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button variant="ghost" size="icon" className="rounded-full text-destructive hover:bg-destructive/10 hover:text-destructive animate-pulse">
+            <LifeBuoy className="h-6 w-6" />
+            <span className="sr-only">SOS</span>
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <ShieldAlert className="h-6 w-6 text-destructive" />
+              Are you sure you want to send an SOS alert?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This will immediately notify your tour guide and emergency contacts of your current location and situation. Only use this in a genuine emergency.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleSos}>
+              Yes, Send Alert
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="ghost" size="icon" className="rounded-full">
@@ -93,9 +137,9 @@ export function Header() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-9 w-9 rounded-full">
             <Avatar className="h-9 w-9">
-              <AvatarImage src={userData.avatar} alt={userData.name} />
+              <AvatarImage src={touristData.avatar} alt={touristData.name} />
               <AvatarFallback>
-                {userData.name
+                {touristData.name
                   .split(' ')
                   .map((n) => n[0])
                   .join('')}
@@ -107,10 +151,10 @@ export function Header() {
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">
-                {userData.name}
+                {touristData.name}
               </p>
               <p className="text-xs leading-none text-muted-foreground">
-                {userData.email}
+                {touristData.email}
               </p>
             </div>
           </DropdownMenuLabel>

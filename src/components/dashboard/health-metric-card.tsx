@@ -3,19 +3,18 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from '@/components/ui/card';
-import type { HealthMetric } from '@/lib/types';
+import type { TouristStat } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 type HealthMetricCardProps = {
-  metric: HealthMetric;
+  metric: TouristStat;
 };
 
 export function HealthMetricCard({ metric }: HealthMetricCardProps) {
   const isPositiveChange = metric.change.startsWith('+');
   return (
-    <Card>
+    <Card className="transition-all hover:shadow-md hover:-translate-y-1">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{metric.label}</CardTitle>
         <metric.icon className="h-4 w-4 text-muted-foreground" />
@@ -33,7 +32,7 @@ export function HealthMetricCard({ metric }: HealthMetricCardProps) {
             isPositiveChange ? 'text-green-600' : 'text-red-600'
           )}
         >
-          {metric.change} from last week
+          {metric.change} from yesterday
         </p>
       </CardContent>
     </Card>

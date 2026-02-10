@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { personalizedHealthAdvice } from '@/ai/flows/personalized-health-advice';
 import { ChatMessage } from './chat-message';
-import { user as mockUser } from '@/lib/data';
+import { tourist as mockUser } from '@/lib/data';
 
 interface Message {
   id: number;
@@ -21,9 +21,9 @@ export function ChatLayout() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hello! I'm your AI health assistant. How can I help you today?",
+      text: "Hello! I'm your AI tour assistant. How can I help you plan your day?",
       isUser: false,
-      user: { name: 'GuardianBot', avatar: '/bot-avatar.png' },
+      user: { name: 'TourBot', avatar: '/bot-avatar.png' },
     },
   ]);
   const [input, setInput] = useState('');
@@ -57,7 +57,7 @@ export function ChatLayout() {
       id: Date.now() + 1,
       text: '...',
       isUser: false,
-      user: { name: 'GuardianBot', avatar: '/bot-avatar.png' },
+      user: { name: 'TourBot', avatar: '/bot-avatar.png' },
       isLoading: true,
     }
 
@@ -66,13 +66,13 @@ export function ChatLayout() {
     setIsLoading(true);
 
     try {
-      // NOTE: In a real app, you would pass actual user data.
-      const healthData = JSON.stringify({ heartRate: 72, steps: 8450 });
-      const preferences = JSON.stringify({ communicationStyle: 'concise' });
+      // NOTE: In a real app, you would pass actual tourist data.
+      const tourData = JSON.stringify({ location: 'Rome', interests: ['history', 'food'] });
+      const preferences = JSON.stringify({ communicationStyle: 'friendly' });
 
       const response = await personalizedHealthAdvice({
         query: input,
-        healthData,
+        healthData: tourData,
         preferences,
       });
 
@@ -80,17 +80,17 @@ export function ChatLayout() {
         id: Date.now() + 2,
         text: response.advice,
         isUser: false,
-        user: { name: 'GuardianBot', avatar: '/bot-avatar.png' },
+        user: { name: 'TourBot', avatar: '/bot-avatar.png' },
       };
 
       setMessages((prev) => [...prev.slice(0, -1), botMessage]);
     } catch (error) {
-      console.error('Error getting health advice:', error);
+      console.error('Error getting AI advice:', error);
       const errorMessage: Message = {
         id: Date.now() + 2,
         text: 'Sorry, I encountered an error. Please try again.',
         isUser: false,
-        user: { name: 'GuardianBot', avatar: '/bot-avatar.png' },
+        user: { name: 'TourBot', avatar: '/bot-avatar.png' },
       };
       setMessages((prev) => [...prev.slice(0, -1), errorMessage]);
     } finally {
@@ -115,7 +115,7 @@ export function ChatLayout() {
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
+            placeholder="Ask for recommendations, directions, etc."
             className="pr-24"
             disabled={isLoading}
           />

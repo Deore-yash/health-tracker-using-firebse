@@ -8,39 +8,39 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { caregivers } from '@/lib/data';
+import { tourGuides } from '@/lib/data';
 
-export default function CaregiverPage() {
+export default function TourGuidesPage() {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-3xl font-headline font-bold">Caregiver Dashboard</h1>
+        <h1 className="text-3xl font-headline font-bold">Tour Guide Dashboard</h1>
         <p className="text-muted-foreground">
-          Monitor users and manage your caregiver team.
+          Monitor tourists and manage your tour guide team.
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Your Caregiver Team</CardTitle>
+          <CardTitle>Your Tour Guide Team</CardTitle>
           <CardDescription>
-            These people have access to your health data and alerts.
+            These people are assigned to your active tours.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {caregivers.map((caregiver) => (
-            <div key={caregiver.id} className="flex items-center justify-between space-x-4 rounded-md border p-4">
+          {tourGuides.map((guide) => (
+            <div key={guide.id} className="flex items-center justify-between space-x-4 rounded-md border p-4 transition-all hover:shadow-md">
               <div className="flex items-center space-x-4">
                 <Avatar>
-                  <AvatarImage src={caregiver.avatar} />
-                  <AvatarFallback>{caregiver.name?.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                  <AvatarImage src={guide.avatar} />
+                  <AvatarFallback>{guide.name?.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="text-sm font-medium leading-none">
-                    {caregiver.name}
+                    {guide.name}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {caregiver.email}
+                    {guide.email}
                   </p>
                 </div>
               </div>

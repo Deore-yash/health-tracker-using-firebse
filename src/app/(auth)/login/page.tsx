@@ -18,7 +18,7 @@ export default function LoginPage() {
         <Icons.logo className="w-12 h-12 mx-auto text-primary" />
         <CardTitle className="text-2xl font-headline">Welcome Back</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account
+          Enter your email below to login to your TourSecure account
         </CardDescription>
       </CardHeader>
       <CardContent>

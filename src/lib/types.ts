@@ -1,15 +1,15 @@
-export type User = {
+export type Tourist = {
   id: string;
   name: string;
   email: string;
   avatar: string;
   age: number;
-  weight: string;
-  height: string;
-  bloodType: string;
+  nationality: string;
+  language: string;
+  emergencyContact: string;
 };
 
-export type HealthMetric = {
+export type TouristStat = {
   id: string;
   label: string;
   value: string;
@@ -18,16 +18,14 @@ export type HealthMetric = {
   icon: React.ComponentType<{ className?: string }>;
 };
 
-export type HealthData = {
-  heartRate: number;
+export type ActivityData = {
+  activityLevel: number;
   steps: number;
-  calories: number;
-  sleep: number; // in hours
 };
 
-export type DailyHealthData = {
+export type DailyActivityData = {
   day: string;
-} & HealthData;
+} & ActivityData;
 
 export type Notification = {
   id: string;
@@ -41,4 +39,13 @@ export type GeoFenceZone = {
   name: string;
   address: string;
   radius: number; // in meters
+};
+
+export type ItineraryItem = {
+  id: string;
+  time: string;
+  title: string;
+  description: string;
+  location: string;
+  status: 'completed' | 'upcoming' | 'ongoing';
 };

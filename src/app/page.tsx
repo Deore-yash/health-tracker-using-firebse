@@ -12,7 +12,7 @@ export default function LandingPage() {
       <header className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center">
         <Icons.logo className="h-8 w-auto text-primary" />
         <span className="font-headline text-2xl font-semibold ml-2 text-foreground">
-          GuardianLife
+          TourSecure
         </span>
         <nav className="ml-auto flex items-center gap-4">
           <Button variant="ghost" asChild>
@@ -30,12 +30,10 @@ export default function LandingPage() {
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-4xl font-headline font-bold tracking-tighter sm:text-5xl xl:text-6xl/none text-primary">
-                    Your Personal Health and Safety Companion
+                    Travel with Confidence and Peace of Mind
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    GuardianLife provides real-time health tracking, emergency
-                    SOS alerts, and AI-powered health advice to keep you and
-                    your loved ones safe and sound.
+                    TourSecure offers real-time location tracking, itinerary management, and instant SOS alerts to ensure your travels are safe and worry-free.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -63,7 +61,7 @@ export default function LandingPage() {
       </main>
       <footer className="flex items-center justify-center py-6 border-t">
         <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} GuardianLife. All rights reserved.
+          © {new Date().getFullYear()} TourSecure. All rights reserved.
         </p>
       </footer>
     </div>

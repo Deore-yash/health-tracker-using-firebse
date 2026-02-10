@@ -19,7 +19,7 @@ export default function SignupPage() {
         <Icons.logo className="w-12 h-12 mx-auto text-primary" />
         <CardTitle className="text-2xl font-headline">Create an Account</CardTitle>
         <CardDescription>
-          Enter your information to create your GuardianLife account
+          Enter your information to create your TourSecure account
         </CardDescription>
       </CardHeader>
       <CardContent>

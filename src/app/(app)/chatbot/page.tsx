@@ -4,9 +4,9 @@ export default function ChatbotPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)]">
       <div className="mb-4">
-        <h1 className="text-3xl font-headline font-bold">AI Health Assistant</h1>
+        <h1 className="text-3xl font-headline font-bold">AI Assistant</h1>
         <p className="text-muted-foreground">
-          Ask me anything about your health, medications, or for stress management tips.
+          Ask me anything about your tour, local attractions, or for recommendations.
         </p>
       </div>
       <ChatLayout />
