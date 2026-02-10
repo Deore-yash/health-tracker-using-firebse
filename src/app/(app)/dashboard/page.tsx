@@ -1,8 +1,30 @@
+'use client';
+
+import { motion } from 'framer-motion';
 import { HealthMetricCard } from '@/components/dashboard/health-metric-card';
 import { HealthChart } from '@/components/dashboard/health-chart';
 import { touristStats, tourist, weeklyActivityData } from '@/lib/data';
 
 export default function DashboardPage() {
+  const containerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    },
+  };
+
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -14,11 +36,23 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <motion.div
+        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {touristStats.map((metric) => (
-          <HealthMetricCard key={metric.id} metric={metric} />
+          <motion.div
+            key={metric.id}
+            variants={itemVariants}
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
+            <HealthMetricCard metric={metric} />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       <div className="grid gap-6 md:grid-cols-2">
         <HealthChart

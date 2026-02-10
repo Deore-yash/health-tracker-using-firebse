@@ -1,3 +1,6 @@
+'use client';
+
+import { motion } from 'framer-motion';
 import {
   Card,
   CardContent,
@@ -20,6 +23,25 @@ export default function ItineraryPage() {
         return <Circle className="h-5 w-5 text-muted-foreground" />;
     }
   };
+
+  const containerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { x: -20, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+    },
+  };
+
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -35,10 +57,16 @@ export default function ItineraryPage() {
           <CardDescription>Your scheduled events in Rome.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="relative pl-6 after:absolute after:inset-y-0 after:w-px after:bg-border after:left-0">
+          <motion.div
+            className="relative pl-6 after:absolute after:inset-y-0 after:w-px after:bg-border after:left-0"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
             {itinerary.map((item) => (
-              <div
+              <motion.div
                 key={item.id}
+                variants={itemVariants}
                 className="grid gap-2 mb-8 pl-8 relative transition-all hover:bg-muted/50 -ml-8 p-2 rounded-md"
               >
                 <div className="flex items-center gap-4">
@@ -64,9 +92,9 @@ export default function ItineraryPage() {
                     {item.location}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </CardContent>
       </Card>
     </div>
