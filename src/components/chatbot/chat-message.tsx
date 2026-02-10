@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
@@ -9,6 +10,7 @@ interface Message {
     isUser: boolean;
     user: { name: string; avatar: string };
     isLoading?: boolean;
+    photoDataUri?: string;
 }
 
 export function ChatMessage({ message }: { message: Message }) {
@@ -39,7 +41,14 @@ export function ChatMessage({ message }: { message: Message }) {
                         <Skeleton className="h-3 w-32" />
                     </div>
                 ) : (
-                    <p>{message.text}</p>
+                    <div className="grid gap-2">
+                        {message.photoDataUri && message.isUser && (
+                            <div className="relative aspect-video rounded-md overflow-hidden">
+                                <Image src={message.photoDataUri} alt="User upload" fill className="object-cover" />
+                            </div>
+                        )}
+                        {message.text && <p>{message.text}</p>}
+                    </div>
                 )}
             </div>
             {message.isUser && (
