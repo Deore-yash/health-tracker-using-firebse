@@ -5,7 +5,7 @@ import { Paperclip, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { personalizedHealthAdvice } from '@/ai/flows/personalized-health-advice';
+import { personalizedTourAdvice } from '@/ai/flows/personalized-health-advice';
 import { ChatMessage } from './chat-message';
 import { tourist as mockUser } from '@/lib/data';
 
@@ -67,12 +67,12 @@ export function ChatLayout() {
 
     try {
       // NOTE: In a real app, you would pass actual tourist data.
-      const tourData = JSON.stringify({ location: 'Rome', interests: ['history', 'food'] });
+      const tourDataStr = JSON.stringify({ location: 'Rome', interests: ['history', 'food'] });
       const preferences = JSON.stringify({ communicationStyle: 'friendly' });
 
-      const response = await personalizedHealthAdvice({
+      const response = await personalizedTourAdvice({
         query: input,
-        healthData: tourData,
+        tourData: tourDataStr,
         preferences,
       });
 

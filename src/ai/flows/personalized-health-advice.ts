@@ -4,56 +4,56 @@
  * @fileOverview This file defines a Genkit flow for providing personalized tour advice using an AI chatbot.
  *
  * It includes functions for:
- * - personalizedHealthAdvice: The main function to get personalized tour advice.
- * - PersonalizedHealthAdviceInput: The input type for the personalizedHealthAdvice function.
- * - PersonalizedHealthAdviceOutput: The output type for the personalizedHealthAdvice function.
+ * - personalizedTourAdvice: The main function to get personalized tour advice.
+ * - PersonalizedTourAdviceInput: The input type for the personalizedTourAdvice function.
+ * - PersonalizedTourAdviceOutput: The output type for the personalizedTourAdvice function.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-const PersonalizedHealthAdviceInputSchema = z.object({
+const PersonalizedTourAdviceInputSchema = z.object({
   query: z.string().describe('The user query for tour advice.'),
-  healthData: z.string().optional().describe('The user tour data as a JSON string.'),
+  tourData: z.string().optional().describe('The user tour data as a JSON string.'),
   preferences: z.string().optional().describe('The user preferences as a JSON string.'),
 });
-export type PersonalizedHealthAdviceInput = z.infer<
-  typeof PersonalizedHealthAdviceInputSchema
+export type PersonalizedTourAdviceInput = z.infer<
+  typeof PersonalizedTourAdviceInputSchema
 >;
 
-const PersonalizedHealthAdviceOutputSchema = z.object({
+const PersonalizedTourAdviceOutputSchema = z.object({
   advice: z.string().describe('The personalized tour advice from the chatbot.'),
 });
-export type PersonalizedHealthAdviceOutput = z.infer<
-  typeof PersonalizedHealthAdviceOutputSchema
+export type PersonalizedTourAdviceOutput = z.infer<
+  typeof PersonalizedTourAdviceOutputSchema
 >;
 
-export async function personalizedHealthAdvice(
-  input: PersonalizedHealthAdviceInput
-): Promise<PersonalizedHealthAdviceOutput> {
-  return personalizedHealthAdviceFlow(input);
+export async function personalizedTourAdvice(
+  input: PersonalizedTourAdviceInput
+): Promise<PersonalizedTourAdviceOutput> {
+  return personalizedTourAdviceFlow(input);
 }
 
 const prompt = ai.definePrompt({
-  name: 'personalizedHealthAdvicePrompt',
-  input: {schema: PersonalizedHealthAdviceInputSchema},
-  output: {schema: PersonalizedHealthAdviceOutputSchema},
-  prompt: `You are a helpful AI tour assistant providing advice on local attractions, restaurant recommendations, and itinerary planning.
+  name: 'personalizedTourAdvicePrompt',
+  input: {schema: PersonalizedTourAdviceInputSchema},
+  output: {schema: PersonalizedTourAdviceOutputSchema},
+  prompt: `You are "TourBot", an expert AI tour guide. Your goal is to provide personalized and helpful guidance to tourists.
 
   Provide personalized and helpful guidance based on the user's tour data and preferences. If tourData or preferences are not available, provide general advice.
 
-  Tour Data: {{{healthData}}}
+  Tour Data: {{{tourData}}}
   Preferences: {{{preferences}}}
 
   User Query: {{{query}}}
   `,
 });
 
-const personalizedHealthAdviceFlow = ai.defineFlow(
+const personalizedTourAdviceFlow = ai.defineFlow(
   {
-    name: 'personalizedHealthAdviceFlow',
-    inputSchema: PersonalizedHealthAdviceInputSchema,
-    outputSchema: PersonalizedHealthAdviceOutputSchema,
+    name: 'personalizedTourAdviceFlow',
+    inputSchema: PersonalizedTourAdviceInputSchema,
+    outputSchema: PersonalizedTourAdviceOutputSchema,
   },
   async input => {
     const {output} = await prompt(input);
