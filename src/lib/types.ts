@@ -1,3 +1,12 @@
+export type UserProfile = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber?: string;
+  dateOfBirth?: string;
+}
+
 export type Tourist = {
   id: string;
   name: string;

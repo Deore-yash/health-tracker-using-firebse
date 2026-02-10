@@ -1,4 +1,12 @@
+'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { doc } from 'firebase/firestore';
+import { useAuth, useFirestore, setDocumentNonBlocking } from '@/firebase';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -8,11 +16,96 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Icons } from '@/components/icons';
+import { useEffect } from 'react';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { useToast } from '@/hooks/use-toast';
+
+const formSchema = z.object({
+  fullName: z.string().min(1, 'Full name is required'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
+type SignupFormValues = z.infer<typeof formSchema>;
 
 export default function SignupPage() {
+  const router = useRouter();
+  const auth = useAuth();
+  const firestore = useFirestore();
+  const { toast } = useToast();
+
+  const form = useForm<SignupFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      fullName: '',
+      email: '',
+      password: '',
+    },
+  });
+
+  const { isSubmitting } = form.formState;
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        router.push('/dashboard');
+      }
+    });
+    return () => unsubscribe();
+  }, [auth, router]);
+
+  const onSubmit = async (values: SignupFormValues) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const user = userCredential.user;
+
+      if (user) {
+        await updateProfile(user, { displayName: values.fullName });
+
+        if (firestore) {
+          const [firstName, ...lastNameParts] = values.fullName.split(' ');
+          const lastName = lastNameParts.join(' ');
+          
+          const userProfile = {
+            id: user.uid,
+            firstName: firstName || '',
+            lastName: lastName || '',
+            email: values.email,
+            phoneNumber: '',
+          };
+
+          const userDocRef = doc(firestore, 'users', user.uid, 'profile');
+          setDocumentNonBlocking(userDocRef, userProfile, { merge: true });
+
+          const aiHealthStateRef = doc(firestore, 'users', user.uid, 'aiHealthState');
+          setDocumentNonBlocking(aiHealthStateRef, {
+              id: user.uid,
+              userId: user.uid,
+              state: 'Initial state',
+              lastUpdated: new Date().toISOString(),
+          }, { merge: true });
+        }
+      }
+    } catch (error) {
+      console.error('Error signing up:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Sign-up Failed',
+        description: 'Could not create your account. Please try again.',
+      });
+    }
+  };
+
   return (
     <Card className="mx-auto max-w-sm w-full">
       <CardHeader className="space-y-1 text-center">
@@ -23,31 +116,56 @@ export default function SignupPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="full-name">Full Name</Label>
-            <Input id="full-name" placeholder="Jane Doe" required />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              required
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Full Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Jane Doe" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" />
-          </div>
-          <Button type="submit" className="w-full">
-            Create an account
-          </Button>
-          <Button variant="outline" className="w-full">
-            Sign up with Google
-          </Button>
-        </div>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="m@example.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? 'Creating Account...' : 'Create an account'}
+            </Button>
+          </form>
+        </Form>
         <div className="mt-4 text-center text-sm">
           Already have an account?{' '}
           <Link href="/login" className="underline">

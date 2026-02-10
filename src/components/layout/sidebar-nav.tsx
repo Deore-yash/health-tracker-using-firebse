@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   MapPin,
@@ -20,10 +20,11 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { Icons } from '@/components/icons';
-import { tourist } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
+import { useAuth, useUser } from '@/firebase';
+import { useToast } from '@/hooks/use-toast';
 
 const links = [
   {
@@ -55,6 +56,25 @@ const links = [
 
 export function SidebarNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const auth = useAuth();
+  const { user } = useUser();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      router.push('/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error signing out',
+        description: 'There was a problem signing out. Please try again.',
+      });
+    }
+  };
+
 
   return (
     <>
@@ -95,23 +115,22 @@ export function SidebarNav() {
               )}
             >
               <Avatar className="h-8 w-8">
-                <AvatarImage src={tourist.avatar} alt={tourist.name} />
+                <AvatarImage src={user?.photoURL ?? undefined} alt={user?.displayName ?? ''} />
                 <AvatarFallback>
-                  {tourist.name
-                    .split(' ')
-                    .map((n) => n[0])
-                    .join('')}
+                  {user?.displayName
+                    ? user.displayName.split(' ').map((n) => n[0]).join('')
+                    : user?.email?.[0].toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                <span className="font-semibold">{tourist.name}</span>
+                <span className="font-semibold">{user?.displayName || user?.email}</span>
                 <span className="text-xs text-muted-foreground">
-                  {tourist.email}
+                  {user?.email}
                 </span>
               </div>
             </div>
           </Link>
-          <Button variant="ghost">
+          <Button variant="ghost" onClick={handleLogout}>
             <LogOut className="mr-2" />
             <span className="group-data-[collapsible=icon]:hidden">
               Logout

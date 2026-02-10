@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Bell,
   LifeBuoy,
@@ -40,11 +41,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { notifications, tourist as touristData } from '@/lib/data';
+import { notifications } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth, useUser } from '@/firebase';
 
 export function Header() {
   const { toast } = useToast();
+  const auth = useAuth();
+  const { user } = useUser();
+  const router = useRouter();
 
   const handleSos = () => {
     toast({
@@ -53,6 +58,21 @@ export function Header() {
       variant: 'destructive',
     });
   };
+
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      router.push('/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error signing out',
+        description: 'There was a problem signing out. Please try again.',
+      });
+    }
+  };
+
 
   return (
     <header className="flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6 sticky top-0 z-30">
@@ -137,12 +157,11 @@ export function Header() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-9 w-9 rounded-full">
             <Avatar className="h-9 w-9">
-              <AvatarImage src={touristData.avatar} alt={touristData.name} />
+              <AvatarImage src={user?.photoURL ?? undefined} alt={user?.displayName ?? ''} />
               <AvatarFallback>
-                {touristData.name
-                  .split(' ')
-                  .map((n) => n[0])
-                  .join('')}
+                {user?.displayName
+                  ? user.displayName.split(' ').map((n) => n[0]).join('')
+                  : user?.email?.[0].toUpperCase()}
               </AvatarFallback>
             </Avatar>
           </Button>
@@ -151,10 +170,10 @@ export function Header() {
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">
-                {touristData.name}
+                {user?.displayName || user?.email}
               </p>
               <p className="text-xs leading-none text-muted-foreground">
-                {touristData.email}
+                {user?.email}
               </p>
             </div>
           </DropdownMenuLabel>
@@ -172,7 +191,7 @@ export function Header() {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
           </DropdownMenuItem>
