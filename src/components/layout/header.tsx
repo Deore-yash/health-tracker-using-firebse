@@ -75,7 +75,7 @@ export function Header() {
 
 
   return (
-    <header className="flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6 sticky top-0 z-30">
+    <header className="flex h-16 items-center gap-4 border-b bg-card/80 backdrop-blur-sm px-4 md:px-6 sticky top-0 z-30">
       <SidebarTrigger className="md:hidden" />
       <div className="w-full flex-1">
         <form>
