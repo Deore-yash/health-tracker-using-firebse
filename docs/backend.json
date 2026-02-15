@@ -4,7 +4,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "UserProfile",
       "type": "object",
-      "description": "Represents a user profile in the GuardianLife application.",
+      "description": "Represents a user profile in the TourSecure application.",
       "properties": {
         "id": {
           "type": "string",
@@ -31,77 +31,53 @@
           "type": "string",
           "description": "User's date of birth.",
           "format": "date-time"
-        },
-        "emergencyContactIds": {
-          "type": "array",
-          "description": "References to EmergencyContacts. (Relationship: UserProfile 1:N EmergencyContact)",
-          "items": {
-            "type": "string"
-          }
-        },
-        "caregiverIds": {
-          "type": "array",
-          "description": "References to UserProfiles acting as caregivers for this user. (Relationship: UserProfile N:N UserProfile - Caregiver)",
-          "items": {
-            "type": "string"
-          }
-        },
-        "healthDataId": {
-          "type": "string",
-          "description": "Reference to HealthData. (Relationship: UserProfile 1:1 HealthData)"
         }
       },
       "required": [
         "id",
         "firstName",
         "lastName",
-        "email",
-        "phoneNumber"
+        "email"
       ]
     },
-    "HealthData": {
+    "ActivityData": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "HealthData",
+      "title": "ActivityData",
       "type": "object",
-      "description": "Stores health-related data for a user.",
+      "description": "Stores activity data for a user.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the HealthData entity."
+          "description": "Unique identifier for the ActivityData entity."
         },
         "userId": {
           "type": "string",
-          "description": "Reference to UserProfile. (Relationship: UserProfile 1:1 HealthData)"
-        },
-        "heartRate": {
-          "type": "number",
-          "description": "User's heart rate."
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N ActivityData)"
         },
         "steps": {
           "type": "number",
           "description": "Number of steps taken by the user."
         },
-        "caloriesBurned": {
+        "distance": {
           "type": "number",
-          "description": "Number of calories burned by the user."
+          "description": "Distance covered by the user in kilometers."
         },
-        "sleepDuration": {
+        "activityLevel": {
           "type": "number",
-          "description": "User's sleep duration in hours."
+          "description": "A percentage representing the user's activity level."
         },
         "timestamp": {
           "type": "string",
-          "description": "Timestamp of when the health data was recorded.",
+          "description": "Timestamp of when the activity data was recorded.",
           "format": "date-time"
         }
       },
       "required": [
         "id",
         "userId",
-        "heartRate",
         "steps",
-        "caloriesBurned",
-        "sleepDuration",
+        "distance",
+        "activityLevel",
         "timestamp"
       ]
     },
@@ -251,6 +227,38 @@
         "timestamp",
         "acknowledged"
       ]
+    },
+    "Tour": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Tour",
+      "type": "object",
+      "description": "Represents a tour group with a guide and tourists.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Tour entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the tour."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the tour."
+        },
+        "guideId": {
+          "type": "string",
+          "description": "The user ID of the tour guide. (Reference to UserProfile)"
+        },
+        "touristIds": {
+          "type": "array",
+          "description": "A list of user IDs for the tourists on this tour. (Reference to UserProfile)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["id", "name", "guideId", "touristIds"]
     }
   },
   "auth": {
@@ -268,7 +276,7 @@
           "schema": {
             "$ref": "#/backend/entities/UserProfile"
           },
-          "description": "Stores user profile information.  This collection uses path-based ownership. No denormalization required.",
+          "description": "Stores user profile information. This collection uses path-based ownership. No denormalization required.",
           "params": [
             {
               "name": "userId",
@@ -278,21 +286,21 @@
         }
       },
       {
-        "path": "/users/{userId}/healthData/{healthDataId}",
+        "path": "/users/{userId}/activityData/{activityDataId}",
         "definition": {
-          "entityName": "HealthData",
+          "entityName": "ActivityData",
           "schema": {
-            "$ref": "#/backend/entities/HealthData"
+            "$ref": "#/backend/entities/ActivityData"
           },
-          "description": "Stores health data for a user. This collection uses path-based ownership. No denormalization required.",
+          "description": "Stores activity data for a user. This collection uses path-based ownership. No denormalization required.",
           "params": [
             {
               "name": "userId",
               "description": "The unique identifier for the user."
             },
             {
-              "name": "healthDataId",
-              "description": "The unique identifier for the health data entry."
+              "name": "activityDataId",
+              "description": "The unique identifier for the activity data entry."
             }
           ]
         }
@@ -372,8 +380,26 @@
             }
           ]
         }
+      },
+      {
+        "path": "/tours/{tourId}",
+        "definition": {
+          "entityName": "Tour",
+          "schema": {
+            "$ref": "#/backend/entities/Tour"
+          },
+          "description": "Stores tour group information. This is a top-level collection.",
+          "params": [
+            {
+              "name": "tourId",
+              "description": "The unique identifier for the tour."
+            }
+          ]
+        }
       }
     ],
-    "reasoning": "The Firestore data structure is designed to ensure security, scalability, and ease of debugging, adhering to the core design principles of Authorization Independence, Clarity of Intent, DBAC (Database-Based Access Control), and QAPs (Rules are not Filters).  It is designed to support the GuardianLife application's features, including user profiles, health data, geo-fencing, emergency alerts, and an AI health chatbot. Each collection is designed with homogeneous security requirements in mind. Authorization independence is achieved by denormalizing authorization data where necessary (e.g., user-owned data within subcollections). Path-based ownership is used to secure user-specific data, enabling simple and efficient security rules.  The structure avoids `get()` calls in security rules, thus enabling atomic operations (transactions/batches)."
+    "reasoning": "The Firestore data structure is designed to ensure security, scalability, and ease of debugging, adhering to the core design principles of Authorization Independence, Clarity of Intent, DBAC (Database-Based Access Control), and QAPs (Rules are not Filters). It is designed to support the TourSecure application's features, including user profiles, activity data, geo-fencing, emergency alerts, an AI chatbot, and tour management. Each collection is designed with homogeneous security requirements in mind. Path-based ownership is used to secure user-specific data, enabling simple and efficient security rules. The structure avoids `get()` calls in security rules, thus enabling atomic operations (transactions/batches)."
   }
 }
+
+    
