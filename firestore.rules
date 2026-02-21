@@ -1,29 +1,22 @@
 /**
- * Core Philosophy: This ruleset enforces a strict user-ownership model for user-specific data
- * and a guide-ownership model for shared tour data. All user-generated content is stored
- * in subcollections under a document corresponding to the user's unique ID (UID). A user can
- * only access and manage data located within their own data tree. Tours are managed by guides.
+ * Core Philosophy: This ruleset enforces a strict user-ownership model for all user-specific data.
+ * All user-generated content is stored in subcollections under a document corresponding to the
+ * user's unique ID (UID). A user can only access and manage data located within their own data tree.
  *
  * Data Structure:
  * - /users/{userId}: User-specific data tree. Each user has their own set of subcollections.
- * - /tours/{tourId}: Shared tour data, managed by the guide assigned to the tour.
  *
  * Key Security Decisions:
  * - User data is private: Access to any path under /users/{userId} is restricted to the
  *   authenticated user whose UID matches {userId}.
- * - Tour data is read-only for most, writable by the guide: Any signed-in user can read tour
- *   details, but only the user ID matching the `guideId` on the tour document can create,
- *   update, or delete it. This prevents unauthorized tour modifications.
  * - No global access: There are no admin roles or public collections defined without rules.
- *   All access is based on user ownership or a clearly defined role (like a guide).
+ *   All access is based on user ownership.
  * - User privacy: Listing the top-level /users collection is explicitly disallowed to prevent
  *   leaking a list of all application users.
  *
- * Denormalization for Authorization: This ruleset relies on path-based authorization for user
- * data and document-based authorization for tour data. By placing all of a user's data under
- * `/users/{userId}`, we avoid slow and costly `get()` calls to other documents for authorization.
- * For tours, we check a `guideId` field within the document itself. This is a performant way
- * to manage ownership of shared resources.
+ * Denormalization for Authorization: This ruleset relies on path-based authorization. By placing
+ * all of a user's data under `/users/{userId}`, we avoid slow and costly `get()` calls to other
+ * documents for authorization, which is a key performance and security best practice.
  */
 rules_version = '2';
 service cloud.firestore {
@@ -47,14 +40,6 @@ service cloud.firestore {
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
-    
-    /**
-     * Checks if the currently signed-in user is the guide for the resource.
-     * The resource must have a 'guideId' field.
-     */
-     function isGuide(resource) {
-       return isSignedIn() && request.auth.uid == resource.data.guideId;
-     }
 
     /**
      * Checks if a document exists and the current user is its owner.
@@ -197,20 +182,5 @@ service cloud.firestore {
       allow update: if isExistingOwner(userId) && isSubcollectionDataImmutable();
       allow delete: if isExistingOwner(userId);
     }
-
-    /**
-     * @description Top-level collection for tours.
-     * @path /tours/{tourId}
-     * @allow (read) - Any signed-in user can view tour information.
-     * @allow (write) - Only the user designated as the guide can create, update, or delete the tour.
-     * @principle Manages access to a shared resource based on a role defined within the document.
-     */
-    match /tours/{tourId} {
-      allow read: if isSignedIn();
-      allow create: if isGuide(request.resource);
-      allow update, delete: if isGuide(resource);
-    }
   }
 }
-
-    

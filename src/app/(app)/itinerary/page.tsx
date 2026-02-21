@@ -45,16 +45,16 @@ export default function ItineraryPage() {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-3xl font-headline font-bold">Today's Itinerary</h1>
+        <h1 className="text-3xl font-headline font-bold">Today's Schedule</h1>
         <p className="text-muted-foreground">
-          A schedule of your activities for the day.
+          A schedule of your health activities for the day.
         </p>
       </div>
 
       <Card>
         <CardHeader>
           <CardTitle>Timeline</CardTitle>
-          <CardDescription>Your scheduled events in Rome.</CardDescription>
+          <CardDescription>Your scheduled events in Nashik.</CardDescription>
         </CardHeader>
         <CardContent>
           <motion.div

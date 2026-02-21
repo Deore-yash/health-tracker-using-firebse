@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { monitoredTourists } from '@/lib/data';
+import { monitoredUsers } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { MapPin, Activity } from 'lucide-react';
 
@@ -23,23 +23,23 @@ export function UserTable() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Monitored Tourists</CardTitle>
+        <CardTitle>Monitored Users</CardTitle>
         <CardDescription>
-          Track the status and location of your assigned tourists.
+          Track the status and location of your assigned users.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Tourist</TableHead>
+              <TableHead>User</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Current Activity</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {monitoredTourists.map((user) => (
+            {monitoredUsers.map((user) => (
               <TableRow key={user.id} className="transition-all hover:bg-muted/50">
                 <TableCell>
                   <div className="flex items-center gap-3">

@@ -54,7 +54,7 @@ export function Header() {
   const handleSos = () => {
     toast({
       title: 'SOS Alert Sent!',
-      description: 'Your tour guide and emergency contacts have been notified.',
+      description: 'Your caregiver and emergency contacts have been notified.',
       variant: 'destructive',
     });
   };
@@ -83,7 +83,7 @@ export function Header() {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search itinerary, places..."
+              placeholder="Search schedule, health data..."
               className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
             />
           </div>
@@ -103,7 +103,7 @@ export function Header() {
               Are you sure you want to send an SOS alert?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This will immediately notify your tour guide and emergency contacts of your current location and situation. Only use this in a genuine emergency.
+              This will immediately notify your caregiver and emergency contacts of your current location and situation. Only use this in a genuine emergency.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

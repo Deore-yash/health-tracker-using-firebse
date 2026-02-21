@@ -1,10 +1,10 @@
 'use server';
 
 /**
- * @fileOverview This file defines a Genkit flow for providing personalized tour advice using an AI chatbot.
+ * @fileOverview This file defines a Genkit flow for providing personalized health advice using an AI chatbot.
  *
  * It includes functions for:
- * - personalizedTourAdvice: The main function to get personalized tour advice.
+ * - personalizedTourAdvice: The main function to get personalized health advice.
  * - PersonalizedTourAdviceInput: The input type for the personalizedTourAdvice function.
  * - PersonalizedTourAdviceOutput: The output type for the personalizedTourAdvice function.
  */
@@ -13,20 +13,20 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const PersonalizedTourAdviceInputSchema = z.object({
-  query: z.string().describe('The user query for tour advice.'),
+  query: z.string().describe('The user query for health advice.'),
   tourData: z
     .string()
     .optional()
-    .describe('The user tour data as a JSON string.'),
+    .describe('The user health data as a JSON string. (e.g., age, pre-existing conditions)'),
   preferences: z
     .string()
     .optional()
-    .describe('The user preferences as a JSON string.'),
+    .describe('The user preferences as a JSON string (e.g., communication style).'),
   photoDataUri: z
     .string()
     .optional()
     .describe(
-      "An optional photo from the user, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+      "An optional photo from the user (e.g., a skin rash), as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
 });
 export type PersonalizedTourAdviceInput = z.infer<
@@ -34,7 +34,7 @@ export type PersonalizedTourAdviceInput = z.infer<
 >;
 
 const PersonalizedTourAdviceOutputSchema = z.object({
-  advice: z.string().describe('The personalized tour advice from the chatbot.'),
+  advice: z.string().describe('The personalized health advice from the chatbot.'),
 });
 export type PersonalizedTourAdviceOutput = z.infer<
   typeof PersonalizedTourAdviceOutputSchema
@@ -50,13 +50,13 @@ const prompt = ai.definePrompt({
   name: 'personalizedTourAdvicePrompt',
   input: {schema: PersonalizedTourAdviceInputSchema},
   output: {schema: PersonalizedTourAdviceOutputSchema},
-  prompt: `You are "TourBot", an expert AI tour guide. Your goal is to provide personalized and helpful guidance to tourists.
+  prompt: `You are "HealthBot", an expert AI health assistant. Your goal is to provide personalized and helpful health guidance. IMPORTANT: You are not a doctor. Always advise the user to consult a medical professional for serious issues.
 
-  If a photo is provided, use it as the primary context for your response. For example, if the user provides a photo of a landmark and asks "what is this?", you should identify the landmark and provide information about it.
+  If a photo is provided, use it as the primary context for your response. For example, if the user provides a photo of a skin condition and asks "what is this?", you should describe what you see and suggest possible conditions, but strongly advise seeing a doctor.
 
-  Provide personalized and helpful guidance based on the user's tour data and preferences. If tourData or preferences are not available, provide general advice.
+  Provide personalized and helpful guidance based on the user's health data and preferences.
 
-  Tour Data: {{{tourData}}}
+  Health Data: {{{tourData}}}
   Preferences: {{{preferences}}}
 
   User Query: {{{query}}}

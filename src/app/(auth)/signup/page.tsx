@@ -112,7 +112,7 @@ export default function SignupPage() {
         <Icons.logo className="w-12 h-12 mx-auto text-primary" />
         <CardTitle className="text-2xl font-headline">Create an Account</CardTitle>
         <CardDescription>
-          Enter your information to create your TourSecure account
+          Enter your information to create your Health Tracker account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -125,7 +125,7 @@ export default function SignupPage() {
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Jane Doe" {...field} />
+                    <Input placeholder="Priya Kulkarni" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,7 +140,7 @@ export default function SignupPage() {
                   <FormControl>
                     <Input
                       type="email"
-                      placeholder="m@example.com"
+                      placeholder="priya@example.com"
                       {...field}
                     />
                   </FormControl>

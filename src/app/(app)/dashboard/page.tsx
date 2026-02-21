@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { HealthMetricCard } from '@/components/dashboard/health-metric-card';
 import { HealthChart } from '@/components/dashboard/health-chart';
-import { touristStats, tourist, weeklyActivityData } from '@/lib/data';
+import { touristStats, user, weeklyActivityData } from '@/lib/data';
 
 export default function DashboardPage() {
   const containerVariants = {
@@ -29,10 +29,10 @@ export default function DashboardPage() {
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-3xl font-headline font-bold tracking-tight">
-          Welcome back, {tourist.name.split(' ')[0]}!
+          Welcome back, {user.name.split(' ')[0]}!
         </h1>
         <p className="text-muted-foreground">
-          Here&apos;s a look at your tour data for today.
+          Here&apos;s a look at your health data for today.
         </p>
       </div>
 

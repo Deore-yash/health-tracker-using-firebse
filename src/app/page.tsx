@@ -130,7 +130,7 @@ export default function LandingPage() {
         <Link href="/" className="flex items-center gap-2">
           <Icons.logo className="h-8 w-auto text-primary" />
           <span className="font-headline text-2xl font-bold text-foreground">
-            TourSecure
+            Health Tracker
           </span>
         </Link>
         <nav className="ml-auto flex items-center gap-2">
@@ -152,13 +152,12 @@ export default function LandingPage() {
               <div className="flex flex-col justify-center space-y-6">
                 <div className="space-y-4">
                   <h1 className="text-4xl font-headline font-extrabold tracking-tighter sm:text-5xl md:text-6xl xl:text-7xl/none text-foreground">
-                    Your Adventure,
+                    Your Health,
                     <br />
-                    <span className="text-primary">Secured.</span>
+                    <span className="text-primary">Monitored.</span>
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    TourSecure is the all-in-one platform for modern tour
-                    operators. Ensure traveler safety with real-time tracking,
+                    Health Tracker is the all-in-one platform for personal and caregiver health monitoring. Ensure well-being with real-time tracking,
                     AI assistance, and instant alerts.
                   </p>
                 </div>
@@ -195,7 +194,7 @@ export default function LandingPage() {
                       <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Loved by 10,000+ tour guides.
+                      Trusted by 1,000+ families.
                     </p>
                   </div>
                 </div>
@@ -225,7 +224,7 @@ export default function LandingPage() {
                   <div className="absolute -bottom-4 -right-4 w-48 rounded-lg bg-card p-4 shadow-lg border">
                     <h4 className="font-semibold text-sm">Real-time Alerts</h4>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Tourist 'Alex' has left the designated safe zone.
+                      High heart rate detected for 'Sameer'.
                     </p>
                     <div className="w-full bg-muted rounded-full h-1.5 mt-2">
                       <div className="bg-destructive h-1.5 rounded-full w-3/4"></div>
@@ -243,10 +242,10 @@ export default function LandingPage() {
                 <CardHeader className="space-y-2 text-center">
                   <Icons.logo className="w-12 h-12 mx-auto text-primary" />
                   <CardTitle className="text-3xl font-headline">
-                    Get Started with TourSecure
+                    Get Started with Health Tracker
                   </CardTitle>
                   <CardDescription>
-                    Create your account in seconds and start securing your tours.
+                    Create your account in seconds and start monitoring your health.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -262,7 +261,7 @@ export default function LandingPage() {
                           <FormItem>
                             <FormLabel>Full Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Jane Doe" {...field} />
+                              <Input placeholder="Priya Kulkarni" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -277,7 +276,7 @@ export default function LandingPage() {
                             <FormControl>
                               <Input
                                 type="email"
-                                placeholder="m@example.com"
+                                placeholder="priya@example.com"
                                 {...field}
                               />
                             </FormControl>
@@ -323,7 +322,7 @@ export default function LandingPage() {
       </main>
       <footer className="container mx-auto flex items-center justify-center py-6">
         <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} TourSecure. All rights reserved.
+          © {new Date().getFullYear()} Health Tracker. All rights reserved.
         </p>
       </footer>
     </div>

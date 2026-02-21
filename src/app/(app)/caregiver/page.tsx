@@ -10,10 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { tourGuides } from '@/lib/data';
+import { caregivers } from '@/lib/data';
 import { motion } from 'framer-motion';
 
-export default function TourGuidesPage() {
+export default function CaregiverPage() {
   const containerVariants = {
     hidden: { opacity: 1 },
     visible: {
@@ -35,17 +35,17 @@ export default function TourGuidesPage() {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-3xl font-headline font-bold">Tour Guide Dashboard</h1>
+        <h1 className="text-3xl font-headline font-bold">Caregiver Dashboard</h1>
         <p className="text-muted-foreground">
-          Monitor tourists and manage your tour guide team.
+          Monitor users and manage your caregiver team.
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Your Tour Guide Team</CardTitle>
+          <CardTitle>Your Caregiver Team</CardTitle>
           <CardDescription>
-            These people are assigned to your active tours.
+            These people are assigned to your monitored users.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -55,7 +55,7 @@ export default function TourGuidesPage() {
             initial="hidden"
             animate="visible"
           >
-            {tourGuides.map((guide) => (
+            {caregivers.map((guide) => (
               <motion.div
                 key={guide.id}
                 variants={itemVariants}

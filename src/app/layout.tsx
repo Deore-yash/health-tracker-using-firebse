@@ -18,8 +18,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'TourSecure',
-  description: 'Your personal tourist safety and monitoring companion.',
+  title: 'Health Tracker',
+  description: 'Your personal health monitoring companion.',
 };
 
 export default function RootLayout({

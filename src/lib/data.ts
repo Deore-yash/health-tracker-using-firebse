@@ -1,57 +1,59 @@
 import {
   Activity,
   Footprints,
+  HeartPulse,
   Navigation,
   Cloudy,
+  Waypoints,
 } from 'lucide-react';
-import type { DailyActivityData, GeoFenceZone, TouristStat, Notification, Tourist, ItineraryItem } from '@/lib/types';
+import type { DailyActivityData, GeoFenceZone, TouristStat, Notification, MonitoredUser, ItineraryItem } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
-const touristAvatar1 = PlaceHolderImages.find((img) => img.id === 'tourist-avatar-1');
+const userAvatar1 = PlaceHolderImages.find((img) => img.id === 'tourist-avatar-1');
 
-export const tourist: Tourist = {
+export const user: MonitoredUser = {
   id: '1',
-  name: 'Alex Smith',
-  email: 'alex.smith@example.com',
-  avatar: touristAvatar1?.imageUrl ?? 'https://picsum.photos/seed/alexsmith/100/100',
-  age: 34,
-  nationality: 'Canadian',
-  language: 'English',
-  emergencyContact: '+1-555-123-4567',
+  name: 'Priya Kulkarni',
+  email: 'priya.kulkarni@example.com',
+  avatar: userAvatar1?.imageUrl ?? 'https://picsum.photos/seed/priyak/100/100',
+  age: 45,
+  nationality: 'Indian',
+  language: 'Marathi',
+  emergencyContact: '+91-9876543210',
 };
 
 export const touristStats: TouristStat[] = [
   {
     id: '1',
     label: 'Activity Level',
-    value: '82',
+    value: '76',
     unit: '%',
-    change: '+5%',
+    change: '-2%',
     icon: Activity,
   },
   {
     id: '2',
     label: 'Steps Today',
-    value: '12,540',
+    value: '8,230',
     unit: '',
-    change: '+22%',
+    change: '+15%',
     icon: Footprints,
   },
   {
     id: '3',
-    label: 'Distance Covered',
-    value: '8.2',
-    unit: 'km',
-    change: '+18%',
-    icon: Navigation,
+    label: 'Heart Rate',
+    value: '72',
+    unit: 'bpm',
+    change: 'Normal',
+    icon: HeartPulse,
   },
   {
     id: '4',
-    label: 'Current Weather',
-    value: '24',
-    unit: '°C',
-    change: 'Cloudy',
-    icon: Cloudy,
+    label: 'Distance',
+    value: '5.4',
+    unit: 'km',
+    change: '+10%',
+    icon: Waypoints,
   },
 ];
 
@@ -62,27 +64,27 @@ export const weeklyActivityData: DailyActivityData[] = [
     { day: 'Thu', activityLevel: 85, steps: 15500 },
     { day: 'Fri', activityLevel: 80, steps: 12500 },
     { day: 'Sat', activityLevel: 90, steps: 18000 },
-    { day: 'Sun', activityLevel: 82, steps: 12540 },
+    { day: 'Sun', activityLevel: 76, steps: 8230 },
 ];
 
 
 export const notifications: Notification[] = [
   {
     id: '1',
-    title: 'Geo-fence Alert',
-    description: 'Alex Smith left the "Hotel" safe zone.',
+    title: 'Medication Reminder',
+    description: 'Time to take your afternoon medication.',
     timestamp: '5m ago',
   },
   {
     id: '2',
-    title: 'Itinerary Update',
-    description: 'Your museum tour has been confirmed for 3 PM.',
+    title: 'Appointment Reminder',
+    description: 'Your appointment with Dr. Sharma is tomorrow at 10 AM.',
     timestamp: '1h ago',
   },
   {
     id: '3',
-    title: 'Weather Warning',
-    description: 'Heavy rain expected this afternoon. Pack an umbrella!',
+    title: 'Activity Goal Met',
+    description: 'Congratulations! You\'ve reached your daily step goal.',
     timestamp: 'Yesterday',
   },
   {
@@ -94,70 +96,70 @@ export const notifications: Notification[] = [
 ];
 
 export const geoFences: GeoFenceZone[] = [
-    { id: '1', name: 'Hotel Roma', address: 'Via del Corso, 1, 00187 Roma RM, Italy', radius: 200 },
-    { id: '2', name: 'Colosseum Area', address: 'Piazza del Colosseo, 1, 00184 Roma RM, Italy', radius: 500 },
+    { id: '1', name: 'Home', address: 'Gangapur Road, Nashik, Maharashtra', radius: 100 },
+    { id: '2', name: 'Godavari Park', address: 'Godavari Ghat, Panchavati, Nashik', radius: 300 },
 ];
 
-export const tourGuides: Partial<Tourist>[] = [
-  { id: '2', name: 'Maria Rossi', email: 'maria.r@toursecure.com', avatar: PlaceHolderImages.find((img) => img.id === 'tour-guide-avatar-1')?.imageUrl },
-  { id: '3', name: 'Marco Bianchi', email: 'marco.b@toursecure.com', avatar: PlaceHolderImages.find((img) => img.id === 'tour-guide-avatar-2')?.imageUrl },
+export const caregivers: Partial<MonitoredUser>[] = [
+  { id: '2', name: 'Rohan Mehta', email: 'rohan.m@healthtracker.com', avatar: PlaceHolderImages.find((img) => img.id === 'tour-guide-avatar-2')?.imageUrl },
+  { id: '3', name: 'Anjali Desai', email: 'anjali.d@healthtracker.com', avatar: PlaceHolderImages.find((img) => img.id === 'tour-guide-avatar-1')?.imageUrl },
 ]
 
-export const monitoredTourists: (Tourist & { status: string; currentActivity: string; })[] = [
-  {...tourist, status: 'Safe', currentActivity: 'Exploring the Roman Forum'},
+export const monitoredUsers: (MonitoredUser & { status: string; currentActivity: string; })[] = [
+  {...user, status: 'Safe', currentActivity: 'At Home'},
   {
     id: '2',
-    name: 'Robert Johnson',
-    email: 'robert.j@example.com',
-    avatar: 'https://picsum.photos/seed/robertj/100/100',
-    age: 72,
-    nationality: 'American',
-    language: 'English',
-    emergencyContact: '+1-555-987-6543',
+    name: 'Sameer Joshi',
+    email: 'sameer.j@example.com',
+    avatar: 'https://picsum.photos/seed/sameerj/100/100',
+    age: 68,
+    nationality: 'Indian',
+    language: 'Hindi',
+    emergencyContact: '+91-9988776655',
     status: 'Alert',
-    currentActivity: 'Left safe zone',
+    currentActivity: 'High Heart Rate Detected',
   }
 ]
 
 export const itinerary: ItineraryItem[] = [
   {
     id: '1',
-    time: '9:00 AM',
-    title: 'Visit the Colosseum',
-    description: 'Guided tour of the ancient amphitheater.',
-    location: 'Rome, Italy',
+    time: '7:00 AM',
+    title: 'Morning Walk',
+    description: 'Walk at Godavari Park.',
+    location: 'Nashik, Maharashtra',
     status: 'completed',
   },
   {
     id: '2',
-    time: '11:00 AM',
-    title: 'Explore the Roman Forum',
-    description: 'Walk through the ruins of the ancient city center.',
-    location: 'Rome, Italy',
+    time: '9:00 AM',
+    title: 'Breakfast & Medication',
+    description: 'Healthy breakfast followed by morning pills.',
+    location: 'Home',
     status: 'ongoing',
   },
   {
     id: '3',
-    time: '1:00 PM',
-    title: 'Lunch at Trattoria da Enzo',
-    description: 'Enjoy traditional Roman cuisine.',
-    location: 'Trastevere, Rome',
+    time: '11:00 AM',
+    title: 'Doctor\'s Appointment',
+    description: 'Check-up with Dr. Sharma.',
+    location: 'Wockhardt Hospital, Nashik',
     status: 'upcoming',
   },
   {
     id: '4',
-    time: '3:00 PM',
-    title: 'Vatican City Tour',
-    description: "Visit St. Peter's Basilica and the Vatican Museums.",
-    location: 'Vatican City',
+    time: '1:00 PM',
+    title: 'Lunch',
+    description: "Healthy lunch at home.",
+    location: 'Home',
     status: 'upcoming',
   },
   {
     id: '5',
-    time: '7:00 PM',
-    title: 'Dinner and Trevi Fountain',
-    description: 'Evening stroll and dinner near the famous fountain.',
-    location: 'Rome, Italy',
+    time: '5:00 PM',
+    title: 'Evening Stroll',
+    description: 'Light walk around the neighborhood.',
+    location: 'Home vicinity',
     status: 'upcoming',
   },
 ];

@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { personalizedTourAdvice } from '@/ai/flows/personalized-health-advice';
 import { ChatMessage } from './chat-message';
-import { tourist as mockUser } from '@/lib/data';
+import { user as mockUser } from '@/lib/data';
 
 interface Message {
   id: number;
@@ -23,9 +23,9 @@ export function ChatLayout() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hello! I'm your AI tour assistant. How can I help you plan your day? You can also upload a photo of a landmark to ask about it.",
+      text: "Hello! I'm your AI health assistant. How can I help you today? You can ask about symptoms, diet, or general wellness.",
       isUser: false,
-      user: { name: 'TourBot', avatar: '/bot-avatar.png' },
+      user: { name: 'HealthBot', avatar: '/bot-avatar.png' },
     },
   ]);
   const [input, setInput] = useState('');
@@ -73,7 +73,7 @@ export function ChatLayout() {
       id: Date.now() + 1,
       text: '...',
       isUser: false,
-      user: { name: 'TourBot', avatar: '/bot-avatar.png' },
+      user: { name: 'HealthBot', avatar: '/bot-avatar.png' },
       isLoading: true,
     };
 
@@ -86,16 +86,16 @@ export function ChatLayout() {
     setIsLoading(true);
 
     try {
-      // NOTE: In a real app, you would pass actual tourist data.
-      const tourDataStr = JSON.stringify({
-        location: 'Rome',
-        interests: ['history', 'food'],
+      // NOTE: In a real app, you would pass actual user health data.
+      const healthDataStr = JSON.stringify({
+        age: 45,
+        conditions: ['High BP'],
       });
-      const preferences = JSON.stringify({ communicationStyle: 'friendly' });
+      const preferences = JSON.stringify({ communicationStyle: 'reassuring' });
 
       const response = await personalizedTourAdvice({
         query: input,
-        tourData: tourDataStr,
+        tourData: healthDataStr, // This should be renamed in the flow to healthData
         preferences,
         photoDataUri: imagePreview || undefined,
       });
@@ -104,7 +104,7 @@ export function ChatLayout() {
         id: Date.now() + 2,
         text: response.advice,
         isUser: false,
-        user: { name: 'TourBot', avatar: '/bot-avatar.png' },
+        user: { name: 'HealthBot', avatar: '/bot-avatar.png' },
       };
 
       setMessages((prev) => [...prev.slice(0, -1), botMessage]);
@@ -114,7 +114,7 @@ export function ChatLayout() {
         id: Date.now() + 2,
         text: 'Sorry, I encountered an error. Please try again.',
         isUser: false,
-        user: { name: 'TourBot', avatar: '/bot-avatar.png' },
+        user: { name: 'HealthBot', avatar: '/bot-avatar.png' },
       };
       setMessages((prev) => [...prev.slice(0, -1), errorMessage]);
     } finally {
@@ -162,7 +162,7 @@ export function ChatLayout() {
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about a place or upload a photo..."
+              placeholder="Ask about a symptom or upload a photo..."
               className="pr-24"
               disabled={isLoading}
             />

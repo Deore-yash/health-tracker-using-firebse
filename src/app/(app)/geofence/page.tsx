@@ -24,9 +24,9 @@ export default function GeoFencePage() {
       <div className="lg:col-span-3">
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">Your Safe Zones</CardTitle>
+            <CardTitle className="font-headline">Your Safe Areas</CardTitle>
             <CardDescription>
-              Manage the geo-fenced areas for tour alerts.
+              Manage the geo-fenced areas for alerts.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -54,25 +54,25 @@ export default function GeoFencePage() {
       <div className="lg:col-span-2">
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">Add New Zone</CardTitle>
-            <CardDescription>Define a new safe area for your tour group.</CardDescription>
+            <CardTitle className="font-headline">Add New Area</CardTitle>
+            <CardDescription>Define a new safe area.</CardDescription>
           </CardHeader>
           <CardContent>
             <form className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="zone-name">Zone Name</Label>
-                <Input id="zone-name" placeholder="e.g., Hotel, Museum District" />
+                <Label htmlFor="zone-name">Area Name</Label>
+                <Input id="zone-name" placeholder="e.g., Home, Park" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="zone-address">Address or Landmark</Label>
-                <Input id="zone-address" placeholder="123 Main St, Anytown" />
+                <Input id="zone-address" placeholder="123 Main St, Nashik" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="zone-radius">Radius (meters)</Label>
-                <Input id="zone-radius" type="number" placeholder="200" />
+                <Input id="zone-radius" type="number" placeholder="100" />
               </div>
               <Button type="submit" className="w-full">
-                Add Zone
+                Add Area
               </Button>
             </form>
           </CardContent>

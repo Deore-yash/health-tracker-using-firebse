@@ -4,7 +4,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "UserProfile",
       "type": "object",
-      "description": "Represents a user profile in the TourSecure application.",
+      "description": "Represents a user profile in the Health Tracker application.",
       "properties": {
         "id": {
           "type": "string",
@@ -227,38 +227,6 @@
         "timestamp",
         "acknowledged"
       ]
-    },
-    "Tour": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Tour",
-      "type": "object",
-      "description": "Represents a tour group with a guide and tourists.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Tour entity."
-        },
-        "name": {
-          "type": "string",
-          "description": "The name of the tour."
-        },
-        "description": {
-          "type": "string",
-          "description": "A brief description of the tour."
-        },
-        "guideId": {
-          "type": "string",
-          "description": "The user ID of the tour guide. (Reference to UserProfile)"
-        },
-        "touristIds": {
-          "type": "array",
-          "description": "A list of user IDs for the tourists on this tour. (Reference to UserProfile)",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["id", "name", "guideId", "touristIds"]
     }
   },
   "auth": {
@@ -380,26 +348,8 @@
             }
           ]
         }
-      },
-      {
-        "path": "/tours/{tourId}",
-        "definition": {
-          "entityName": "Tour",
-          "schema": {
-            "$ref": "#/backend/entities/Tour"
-          },
-          "description": "Stores tour group information. This is a top-level collection.",
-          "params": [
-            {
-              "name": "tourId",
-              "description": "The unique identifier for the tour."
-            }
-          ]
-        }
       }
     ],
-    "reasoning": "The Firestore data structure is designed to ensure security, scalability, and ease of debugging, adhering to the core design principles of Authorization Independence, Clarity of Intent, DBAC (Database-Based Access Control), and QAPs (Rules are not Filters). It is designed to support the TourSecure application's features, including user profiles, activity data, geo-fencing, emergency alerts, an AI chatbot, and tour management. Each collection is designed with homogeneous security requirements in mind. Path-based ownership is used to secure user-specific data, enabling simple and efficient security rules. The structure avoids `get()` calls in security rules, thus enabling atomic operations (transactions/batches)."
+    "reasoning": "The Firestore data structure is designed to ensure security, scalability, and ease of debugging, adhering to the core design principles of Authorization Independence, Clarity of Intent, DBAC (Database-Based Access Control), and QAPs (Rules are not Filters). It is designed to support the Health Tracker application's features, including user profiles, activity data, geo-fencing, emergency alerts, and an AI chatbot. Each collection is designed with homogeneous security requirements in mind. Path-based ownership is used to secure user-specific data, enabling simple and efficient security rules. The structure avoids `get()` calls in security rules, thus enabling atomic operations (transactions/batches)."
   }
 }
-
-    

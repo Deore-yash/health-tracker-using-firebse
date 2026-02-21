@@ -35,12 +35,12 @@ const links = [
   {
     href: '/itinerary',
     icon: ListChecks,
-    label: 'Itinerary',
+    label: 'Schedule',
   },
   {
     href: '/geofence',
     icon: MapPin,
-    label: 'Safe Zones',
+    label: 'Safe Areas',
   },
   {
     href: '/chatbot',
@@ -50,7 +50,7 @@ const links = [
   {
     href: '/caregiver',
     icon: Users,
-    label: 'Tour Guides',
+    label: 'Caregivers',
   },
 ];
 
@@ -82,7 +82,7 @@ export function SidebarNav() {
         <div className="flex items-center gap-2 p-2">
           <Icons.logo className="h-8 w-auto text-primary" />
           <span className="font-headline text-2xl font-semibold text-foreground">
-            TourSecure
+            Health Tracker
           </span>
         </div>
       </SidebarHeader>

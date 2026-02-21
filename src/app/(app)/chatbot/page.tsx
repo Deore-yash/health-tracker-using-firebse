@@ -6,7 +6,7 @@ export default function ChatbotPage() {
       <div className="mb-4">
         <h1 className="text-3xl font-headline font-bold">AI Assistant</h1>
         <p className="text-muted-foreground">
-          Ask me anything about your tour, local attractions, or for recommendations.
+          Ask me anything about your health, diet, or for wellness advice.
         </p>
       </div>
       <ChatLayout />

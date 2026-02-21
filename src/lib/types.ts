@@ -7,7 +7,7 @@ export type UserProfile = {
   dateOfBirth?: string;
 }
 
-export type Tourist = {
+export type MonitoredUser = {
   id: string;
   name: string;
   email: string;
