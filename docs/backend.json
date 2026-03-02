@@ -238,13 +238,13 @@
   "firestore": {
     "structure": [
       {
-        "path": "/users/{userId}/profile",
+        "path": "/users/{userId}/profile/data",
         "definition": {
           "entityName": "UserProfile",
           "schema": {
             "$ref": "#/backend/entities/UserProfile"
           },
-          "description": "Stores user profile information. This collection uses path-based ownership. No denormalization required.",
+          "description": "Stores user profile information. This collection uses path-based ownership. The document ID is always 'data'.",
           "params": [
             {
               "name": "userId",
@@ -314,13 +314,13 @@
         }
       },
       {
-        "path": "/users/{userId}/aiHealthState",
+        "path": "/users/{userId}/aiHealthState/data",
         "definition": {
           "entityName": "AiHealthState",
           "schema": {
             "$ref": "#/backend/entities/AiHealthState"
           },
-          "description": "Stores the AI health state for a user. This collection uses path-based ownership. No denormalization required.",
+          "description": "Stores the AI health state for a user. This collection uses path-based ownership. The document ID is always 'data'.",
           "params": [
             {
               "name": "userId",

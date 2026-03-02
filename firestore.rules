@@ -99,12 +99,12 @@ service cloud.firestore {
 
     /**
      * @description A user's own profile document.
-     * @path /users/{userId}/profile
-     * @allow (create) - A new user `auth.uid: 'user123'` creates their own profile at `/users/user123/profile`.
+     * @path /users/{userId}/profile/data
+     * @allow (create) - A new user `auth.uid: 'user123'` creates their own profile at `/users/user123/profile/data`.
      * @deny (update) - User `auth.uid: 'user456'` tries to update the profile for `user123`.
      * @principle Restricts access to a user's own data tree and validates relational integrity on create/update.
      */
-    match /users/{userId}/profile {
+    match /users/{userId}/profile/data {
       allow get: if isOwner(userId);
       allow list: if false; // This is a specific document, not a collection to be listed.
       allow create: if isOwner(userId) && hasValidProfileDataOnCreate(userId);
@@ -156,12 +156,12 @@ service cloud.firestore {
 
     /**
      * @description A user's singleton AI health state document.
-     * @path /users/{userId}/aiHealthState
-     * @allow (get) - User `auth.uid: 'user123'` reads their own AI state at `/users/user123/aiHealthState`.
+     * @path /users/{userId}/aiHealthState/data
+     * @allow (get) - User `auth.uid: 'user123'` reads their own AI state at `/users/user123/aiHealthState/data`.
      * @deny (create) - User `auth.uid: 'user456'` tries to create an AI state for `user123`.
      * @principle Enforces document ownership for a singleton document within a user's data tree.
      */
-    match /users/{userId}/aiHealthState {
+    match /users/{userId}/aiHealthState/data {
       allow get: if isOwner(userId);
       allow list: if false; // This is a specific document, not a collection to be listed.
       allow create: if isOwner(userId) && hasValidSubcollectionDataOnCreate(userId);

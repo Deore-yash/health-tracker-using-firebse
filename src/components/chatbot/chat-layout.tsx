@@ -34,13 +34,13 @@ export function ChatLayout() {
 
   const profileRef = useMemoFirebase(() => {
     if (!user || !firestore) return null;
-    return doc(firestore, 'users', user.uid, 'profile');
+    return doc(firestore, 'users', user.uid, 'profile', 'data');
   }, [user, firestore]);
   const { data: profile, isLoading: isProfileLoading } = useDoc<UserProfile>(profileRef);
 
   const aiHealthStateRef = useMemoFirebase(() => {
     if (!user || !firestore) return null;
-    return doc(firestore, 'users', user.uid, 'aiHealthState');
+    return doc(firestore, 'users', user.uid, 'aiHealthState', 'data');
   }, [user, firestore]);
   const { data: aiHealthState, isLoading: isStateLoading } = useDoc<AiHealthState>(aiHealthStateRef);
 

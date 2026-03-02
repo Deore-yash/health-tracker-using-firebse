@@ -85,10 +85,10 @@ export default function SignupPage() {
             phoneNumber: '',
           };
 
-          const userDocRef = doc(firestore, 'users', user.uid, 'profile');
+          const userDocRef = doc(firestore, 'users', user.uid, 'profile', 'data');
           setDocumentNonBlocking(userDocRef, userProfile, { merge: true });
 
-          const aiHealthStateRef = doc(firestore, 'users', user.uid, 'aiHealthState');
+          const aiHealthStateRef = doc(firestore, 'users', user.uid, 'aiHealthState', 'data');
           setDocumentNonBlocking(aiHealthStateRef, {
               id: user.uid,
               userId: user.uid,
