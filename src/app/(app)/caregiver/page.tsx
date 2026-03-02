@@ -25,10 +25,13 @@ export default function CaregiverPage() {
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 20, opacity: 0, scale: 0.95, rotate: -1 },
     visible: {
       y: 0,
       opacity: 1,
+      scale: 1,
+      rotate: 0,
+      transition: { type: 'spring', stiffness: 260, damping: 20 },
     },
   };
 
@@ -59,8 +62,7 @@ export default function CaregiverPage() {
               <motion.div
                 key={guide.id}
                 variants={itemVariants}
-                whileHover={{ y: -5 }}
-                transition={{ type: 'spring', stiffness: 300 }}
+                whileHover={{ y: -5, transition: { type: 'spring', stiffness: 300 } }}
                 className="flex items-center justify-between space-x-4 rounded-md border p-4 transition-shadow hover:shadow-lg"
               >
                 <div className="flex items-center space-x-4">

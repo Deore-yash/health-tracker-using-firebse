@@ -35,10 +35,12 @@ export default function ItineraryPage() {
   };
 
   const itemVariants = {
-    hidden: { x: -20, opacity: 0 },
+    hidden: { x: -20, opacity: 0, scale: 0.95 },
     visible: {
       x: 0,
       opacity: 1,
+      scale: 1,
+      transition: { type: 'spring', stiffness: 260, damping: 25 },
     },
   };
 

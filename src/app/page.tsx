@@ -11,6 +11,7 @@ import { useAuth, useFirestore, setDocumentNonBlocking } from '@/firebase';
 import { useEffect } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
+import { motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -237,7 +238,13 @@ export default function LandingPage() {
         </section>
         <section id="register" className="w-full py-20 md:py-32 lg:py-40 bg-muted/40">
           <div className="container px-4 md:px-6">
-            <div className="max-w-xl mx-auto">
+            <motion.div
+              className="max-w-xl mx-auto"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            >
               <Card>
                 <CardHeader className="space-y-2 text-center">
                   <Icons.logo className="w-12 h-12 mx-auto text-primary" />
@@ -316,7 +323,7 @@ export default function LandingPage() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
           </div>
         </section>
       </main>
