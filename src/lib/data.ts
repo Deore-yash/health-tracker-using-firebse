@@ -13,9 +13,9 @@ const userAvatar1 = PlaceHolderImages.find((img) => img.id === 'tourist-avatar-1
 
 export const user: MonitoredUser = {
   id: '1',
-  name: 'Priya Kulkarni',
-  email: 'priya.kulkarni@example.com',
-  avatar: userAvatar1?.imageUrl ?? 'https://picsum.photos/seed/priyak/100/100',
+  name: 'Yash Deore',
+  email: 'yash.deore@example.com',
+  avatar: userAvatar1?.imageUrl ?? 'https://picsum.photos/seed/yashd/100/100',
   age: 45,
   nationality: 'Indian',
   language: 'Marathi',
