@@ -94,14 +94,15 @@ export default function LandingPage() {
             phoneNumber: '',
           };
 
-          const userDocRef = doc(firestore, 'users', user.uid, 'profile');
+          const userDocRef = doc(firestore, 'users', user.uid, 'profile', 'data');
           setDocumentNonBlocking(userDocRef, userProfile, { merge: true });
 
           const aiHealthStateRef = doc(
             firestore,
             'users',
             user.uid,
-            'aiHealthState'
+            'aiHealthState',
+            'data'
           );
           setDocumentNonBlocking(
             aiHealthStateRef,
@@ -166,9 +167,9 @@ export default function LandingPage() {
                     }}
                     className="text-4xl font-headline font-extrabold tracking-tighter sm:text-5xl md:text-6xl xl:text-7xl/none text-foreground"
                   >
-                    A Guardian for
+                    Your Health,
                     <br />
-                    <span className="text-primary">Your Well-being.</span>
+                    <span className="text-primary">Monitored.</span>
                   </motion.h1>
                   <motion.p 
                     variants={{
@@ -177,7 +178,8 @@ export default function LandingPage() {
                     }}
                     className="max-w-[600px] text-muted-foreground md:text-xl"
                   >
-                    Stay connected to your health and the well-being of your loved ones. Our intuitive platform offers real-time monitoring, intelligent insights, and immediate alerts, providing peace of mind for everyone.
+                    Health Tracker is the all-in-one platform for personal and caregiver health monitoring. Ensure well-being with real-time tracking,
+                    AI assistance, and instant alerts.
                   </motion.p>
                 </motion.div>
                 <motion.div 
