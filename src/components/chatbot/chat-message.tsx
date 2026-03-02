@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import type { User } from 'firebase/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
@@ -13,7 +14,7 @@ interface Message {
     photoDataUri?: string;
 }
 
-export function ChatMessage({ message }: { message: Message }) {
+export function ChatMessage({ message, user }: { message: Message, user: User | null }) {
     return (
         <div
             className={cn(
@@ -36,9 +37,10 @@ export function ChatMessage({ message }: { message: Message }) {
                 )}
             >
                 {message.isLoading ? (
-                    <div className="space-y-2">
-                        <Skeleton className="h-3 w-20" />
-                        <Skeleton className="h-3 w-32" />
+                    <div className="flex items-center gap-2">
+                       <Skeleton className="h-3 w-3 rounded-full" />
+                       <Skeleton className="h-3 w-3 rounded-full" />
+                       <Skeleton className="h-3 w-3 rounded-full" />
                     </div>
                 ) : (
                     <div className="grid gap-2">
@@ -47,15 +49,17 @@ export function ChatMessage({ message }: { message: Message }) {
                                 <Image src={message.photoDataUri} alt="User upload" fill className="object-cover" />
                             </div>
                         )}
-                        {message.text && <p>{message.text}</p>}
+                        {message.text && <p className="whitespace-pre-wrap">{message.text}</p>}
                     </div>
                 )}
             </div>
-            {message.isUser && (
+            {message.isUser && user && (
                 <Avatar className="h-9 w-9 border">
-                    <AvatarImage src={message.user.avatar} alt={message.user.name} />
+                    <AvatarImage src={user.photoURL ?? undefined} alt={user.displayName ?? ''} />
                     <AvatarFallback>
-                        {message.user.name.split(' ').map((n) => n[0]).join('')}
+                        {user.displayName
+                        ? user.displayName.split(' ').map((n) => n[0]).join('')
+                        : user.email?.[0].toUpperCase()}
                     </AvatarFallback>
                 </Avatar>
             )}

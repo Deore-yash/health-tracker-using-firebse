@@ -58,3 +58,10 @@ export type ItineraryItem = {
   location: string;
   status: 'completed' | 'upcoming' | 'ongoing';
 };
+
+export type AiHealthState = {
+  id: string;
+  userId: string;
+  state: string;
+  lastUpdated: string;
+};

@@ -4,24 +4,25 @@
  * @fileOverview This file defines a Genkit flow for providing personalized health advice using an AI chatbot.
  *
  * It includes functions for:
- * - personalizedTourAdvice: The main function to get personalized health advice.
- * - PersonalizedTourAdviceInput: The input type for the personalizedTourAdvice function.
- * - PersonalizedTourAdviceOutput: The output type for the personalizedTourAdvice function.
+ * - personalizedHealthAdvice: The main function to get personalized health advice.
+ * - PersonalizedHealthAdviceInput: The input type for the personalizedHealthAdvice function.
+ * - PersonalizedHealthAdviceOutput: The output type for the personalizedHealthAdvice function.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-const PersonalizedTourAdviceInputSchema = z.object({
+const PersonalizedHealthAdviceInputSchema = z.object({
   query: z.string().describe('The user query for health advice.'),
   healthData: z
     .string()
     .optional()
     .describe('The user health data as a JSON string. (e.g., age, pre-existing conditions)'),
-  preferences: z
+  currentState: z
     .string()
     .optional()
-    .describe('The user preferences as a JSON string (e.g., communication style).'),
+    .describe("A summary of the user's current health situation and recent conversation topics."),
+  history: z.array(z.string()).optional().describe('The recent conversation history.'),
   photoDataUri: z
     .string()
     .optional()
@@ -29,48 +30,55 @@ const PersonalizedTourAdviceInputSchema = z.object({
       "An optional photo from the user (e.g., a skin rash), as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
 });
-export type PersonalizedTourAdviceInput = z.infer<
-  typeof PersonalizedTourAdviceInputSchema
+export type PersonalizedHealthAdviceInput = z.infer<
+  typeof PersonalizedHealthAdviceInputSchema
 >;
 
-const PersonalizedTourAdviceOutputSchema = z.object({
+const PersonalizedHealthAdviceOutputSchema = z.object({
   advice: z.string().describe('The personalized health advice from the chatbot.'),
+  newState: z.string().describe("An updated, concise summary of the user's health state and the conversation, to be used as the AI's memory for the next interaction."),
 });
-export type PersonalizedTourAdviceOutput = z.infer<
-  typeof PersonalizedTourAdviceOutputSchema
+export type PersonalizedHealthAdviceOutput = z.infer<
+  typeof PersonalizedHealthAdviceOutputSchema
 >;
 
-export async function personalizedTourAdvice(
-  input: PersonalizedTourAdviceInput
-): Promise<PersonalizedTourAdviceOutput> {
-  return personalizedTourAdviceFlow(input);
+export async function personalizedHealthAdvice(
+  input: PersonalizedHealthAdviceInput
+): Promise<PersonalizedHealthAdviceOutput> {
+  return personalizedHealthAdviceFlow(input);
 }
 
 const prompt = ai.definePrompt({
-  name: 'personalizedTourAdvicePrompt',
-  input: {schema: PersonalizedTourAdviceInputSchema},
-  output: {schema: PersonalizedTourAdviceOutputSchema},
-  prompt: `You are "HealthBot", an expert AI health assistant. Your goal is to provide personalized and helpful health guidance. IMPORTANT: You are not a doctor. Always advise the user to consult a medical professional for serious issues.
+  name: 'personalizedHealthAdvicePrompt',
+  input: {schema: PersonalizedHealthAdviceInputSchema},
+  output: {schema: PersonalizedHealthAdviceOutputSchema},
+  prompt: `You are "HealthBot", an expert AI health assistant. Your goal is to provide personalized, helpful, and safe health guidance. IMPORTANT: You are not a doctor. Always advise the user to consult a medical professional for diagnosis and treatment of serious issues.
 
-  If a photo is provided, use it as the primary context for your response. For example, if the user provides a photo of a skin condition and asks "what is this?", you should describe what you see and suggest possible conditions, but strongly advise seeing a doctor.
+  CONTEXT:
+  - User's Health Profile: {{{healthData}}}
+  - AI's Memory (Current State): "{{{currentState}}}"
+  - Recent Conversation:
+  {{#each history}}
+  - {{{this}}}
+  {{/each}}
 
-  Provide personalized and helpful guidance based on the user's health data and preferences.
-
-  Health Data: {{{healthData}}}
-  Preferences: {{{preferences}}}
-
-  User Query: {{{query}}}
+  USER'S LATEST QUERY: "{{{query}}}"
   {{#if photoDataUri}}
-  Photo: {{media url=photoDataUri}}
+  - The user has also provided a photo: {{media url=photoDataUri}}
   {{/if}}
-  `,
+
+  YOUR TASK:
+  1.  **Generate Advice**: Based on all the context above, provide a clear, empathetic, and helpful response to the user's query.
+  2.  **Update State**: After generating the advice, create a new, concise summary of the user's situation and the key points of this interaction. This summary will be your memory for the next conversation. It should be a brief, neutral statement. For example: "User asked about a rash. AI suggested it might be eczema and advised seeing a doctor. User seems concerned about dry skin."
+
+  Respond with the 'advice' and the 'newState' in the specified output format.`,
 });
 
-const personalizedTourAdviceFlow = ai.defineFlow(
+const personalizedHealthAdviceFlow = ai.defineFlow(
   {
-    name: 'personalizedTourAdviceFlow',
-    inputSchema: PersonalizedTourAdviceInputSchema,
-    outputSchema: PersonalizedTourAdviceOutputSchema,
+    name: 'personalizedHealthAdviceFlow',
+    inputSchema: PersonalizedHealthAdviceInputSchema,
+    outputSchema: PersonalizedHealthAdviceOutputSchema,
   },
   async input => {
     const {output} = await prompt(input);
