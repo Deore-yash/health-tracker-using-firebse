@@ -78,9 +78,9 @@ export default function LoginPage() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
       className="w-full"
     >
       <Card className="mx-auto max-w-sm w-full">
@@ -103,7 +103,7 @@ export default function LoginPage() {
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="yash@example.com"
+                        placeholder="yash.deore@example.com"
                         {...field}
                       />
                     </FormControl>

@@ -18,13 +18,11 @@ export default function DashboardPage() {
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0, scale: 0.95, rotate: -2 },
+    hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      scale: 1,
-      rotate: 0,
-      transition: { type: 'spring', stiffness: 260, damping: 20 },
+      transition: { type: 'spring', stiffness: 300, damping: 30 },
     },
   };
 
@@ -35,7 +33,7 @@ export default function DashboardPage() {
           Welcome back, {user.name.split(' ')[0]}!
         </h1>
         <p className="text-muted-foreground">
-          Here&apos;s a look at your health data for today.
+          Here's your daily health summary.
         </p>
       </div>
 

@@ -151,18 +151,41 @@ export default function LandingPage() {
           <div className="container px-4 md:px-6">
             <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
               <div className="flex flex-col justify-center space-y-6">
-                <div className="space-y-4">
-                  <h1 className="text-4xl font-headline font-extrabold tracking-tighter sm:text-5xl md:text-6xl xl:text-7xl/none text-foreground">
-                    Your Health,
+                <motion.div 
+                  className="space-y-4"
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    visible: { transition: { staggerChildren: 0.1 } }
+                  }}
+                >
+                  <motion.h1 
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+                    }}
+                    className="text-4xl font-headline font-extrabold tracking-tighter sm:text-5xl md:text-6xl xl:text-7xl/none text-foreground"
+                  >
+                    A Guardian for
                     <br />
-                    <span className="text-primary">Monitored.</span>
-                  </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    Health Tracker is the all-in-one platform for personal and caregiver health monitoring. Ensure well-being with real-time tracking,
-                    AI assistance, and instant alerts.
-                  </p>
-                </div>
-                <div className="flex items-center gap-4">
+                    <span className="text-primary">Your Well-being.</span>
+                  </motion.h1>
+                  <motion.p 
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.1 } }
+                    }}
+                    className="max-w-[600px] text-muted-foreground md:text-xl"
+                  >
+                    Stay connected to your health and the well-being of your loved ones. Our intuitive platform offers real-time monitoring, intelligent insights, and immediate alerts, providing peace of mind for everyone.
+                  </motion.p>
+                </motion.div>
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="flex items-center gap-4"
+                >
                   <div className="flex items-center -space-x-2">
                     <Image
                       src="https://picsum.photos/seed/p1/40/40"
@@ -198,8 +221,13 @@ export default function LandingPage() {
                       Trusted by 1,000+ families.
                     </p>
                   </div>
-                </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                </motion.div>
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="flex flex-col gap-2 min-[400px]:flex-row"
+                >
                   <Button
                     size="lg"
                     asChild
@@ -210,19 +238,24 @@ export default function LandingPage() {
                   <Button size="lg" variant="outline" asChild>
                     <Link href="#">Book a Demo</Link>
                   </Button>
-                </div>
+                </motion.div>
               </div>
               {heroImage && (
-                <div className="relative group">
+                 <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
+                    className="relative group"
+                  >
                   <Image
                     src={heroImage.imageUrl}
                     width={600}
                     height={600}
                     alt={heroImage.description}
                     data-ai-hint={heroImage.imageHint}
-                    className="mx-auto aspect-square overflow-hidden rounded-xl object-cover transition-all duration-300 group-hover:scale-105"
+                    className="mx-auto aspect-square overflow-hidden rounded-xl object-cover transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl"
                   />
-                  <div className="absolute -bottom-4 -right-4 w-48 rounded-lg bg-card p-4 shadow-lg border">
+                  <div className="absolute -bottom-4 -right-4 w-48 rounded-lg bg-card p-4 shadow-lg border transition-all duration-300 group-hover:scale-105">
                     <h4 className="font-semibold text-sm">Real-time Alerts</h4>
                     <p className="text-xs text-muted-foreground mt-1">
                       High heart rate detected for 'Sameer'.
@@ -231,7 +264,7 @@ export default function LandingPage() {
                       <div className="bg-destructive h-1.5 rounded-full w-3/4"></div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               )}
             </div>
           </div>
@@ -283,7 +316,7 @@ export default function LandingPage() {
                             <FormControl>
                               <Input
                                 type="email"
-                                placeholder="yash@example.com"
+                                placeholder="yash.deore@example.com"
                                 {...field}
                               />
                             </FormControl>

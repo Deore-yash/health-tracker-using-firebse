@@ -29,18 +29,17 @@ export default function ItineraryPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.1,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { x: -20, opacity: 0, scale: 0.95 },
+    hidden: { x: -20, opacity: 0 },
     visible: {
       x: 0,
       opacity: 1,
-      scale: 1,
-      transition: { type: 'spring', stiffness: 260, damping: 25 },
+      transition: { ease: 'easeOut', duration: 0.4 },
     },
   };
 

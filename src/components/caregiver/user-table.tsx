@@ -40,7 +40,7 @@ export function UserTable() {
           </TableHeader>
           <TableBody>
             {monitoredUsers.map((user) => (
-              <TableRow key={user.id} className="transition-all hover:bg-muted/50">
+              <TableRow key={user.id} className="transition-all hover:bg-muted/50 hover:shadow-md">
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <Avatar>
