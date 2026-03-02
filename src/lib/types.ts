@@ -18,7 +18,7 @@ export type MonitoredUser = {
   emergencyContact: string;
 };
 
-export type TouristStat = {
+export type HealthMetric = {
   id: string;
   label: string;
   value: string;

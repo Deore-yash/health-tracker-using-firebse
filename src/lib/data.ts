@@ -2,11 +2,9 @@ import {
   Activity,
   Footprints,
   HeartPulse,
-  Navigation,
-  Cloudy,
   Waypoints,
 } from 'lucide-react';
-import type { DailyActivityData, GeoFenceZone, TouristStat, Notification, MonitoredUser, ItineraryItem } from '@/lib/types';
+import type { DailyActivityData, GeoFenceZone, HealthMetric, Notification, MonitoredUser, ItineraryItem } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const userAvatar1 = PlaceHolderImages.find((img) => img.id === 'tourist-avatar-1');
@@ -22,7 +20,7 @@ export const user: MonitoredUser = {
   emergencyContact: '+91-9876543210',
 };
 
-export const touristStats: TouristStat[] = [
+export const healthMetrics: HealthMetric[] = [
   {
     id: '1',
     label: 'Activity Level',

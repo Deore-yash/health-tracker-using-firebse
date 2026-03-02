@@ -95,7 +95,7 @@ export function ChatLayout() {
 
       const response = await personalizedTourAdvice({
         query: input,
-        tourData: healthDataStr, // This should be renamed in the flow to healthData
+        healthData: healthDataStr,
         preferences,
         photoDataUri: imagePreview || undefined,
       });

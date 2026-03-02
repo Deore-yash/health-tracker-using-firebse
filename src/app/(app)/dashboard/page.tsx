@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { HealthMetricCard } from '@/components/dashboard/health-metric-card';
 import { HealthChart } from '@/components/dashboard/health-chart';
-import { touristStats, user, weeklyActivityData } from '@/lib/data';
+import { healthMetrics, user, weeklyActivityData } from '@/lib/data';
 
 export default function DashboardPage() {
   const containerVariants = {
@@ -45,7 +45,7 @@ export default function DashboardPage() {
         initial="hidden"
         animate="visible"
       >
-        {touristStats.map((metric) => (
+        {healthMetrics.map((metric) => (
           <motion.div
             key={metric.id}
             variants={itemVariants}

@@ -142,7 +142,7 @@ export default function ProfilePage() {
           <CardHeader>
             <CardTitle className="font-headline">Edit Profile</CardTitle>
             <CardDescription>
-              Update your personal and tour information.
+              Update your personal information.
             </CardDescription>
           </CardHeader>
           <CardContent>

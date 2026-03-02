@@ -14,7 +14,7 @@ import {z} from 'genkit';
 
 const PersonalizedTourAdviceInputSchema = z.object({
   query: z.string().describe('The user query for health advice.'),
-  tourData: z
+  healthData: z
     .string()
     .optional()
     .describe('The user health data as a JSON string. (e.g., age, pre-existing conditions)'),
@@ -56,7 +56,7 @@ const prompt = ai.definePrompt({
 
   Provide personalized and helpful guidance based on the user's health data and preferences.
 
-  Health Data: {{{tourData}}}
+  Health Data: {{{healthData}}}
   Preferences: {{{preferences}}}
 
   User Query: {{{query}}}

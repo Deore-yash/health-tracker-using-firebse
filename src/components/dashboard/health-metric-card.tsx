@@ -4,11 +4,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import type { TouristStat } from '@/lib/types';
+import type { HealthMetric } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 type HealthMetricCardProps = {
-  metric: TouristStat;
+  metric: HealthMetric;
 };
 
 export function HealthMetricCard({ metric }: HealthMetricCardProps) {
