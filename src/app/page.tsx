@@ -257,7 +257,12 @@ export default function LandingPage() {
                     data-ai-hint={heroImage.imageHint}
                     className="mx-auto aspect-square overflow-hidden rounded-xl object-cover transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl"
                   />
-                  <div className="absolute -bottom-4 -right-4 w-48 rounded-lg bg-card p-4 shadow-lg border transition-all duration-300 group-hover:scale-105">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.5, ease: 'easeOut', delay: 0.5 }}
+                    className="absolute -bottom-4 -right-4 w-48 rounded-lg bg-card p-4 shadow-lg border transition-all duration-300 group-hover:scale-105"
+                  >
                     <h4 className="font-semibold text-sm">Real-time Alerts</h4>
                     <p className="text-xs text-muted-foreground mt-1">
                       High heart rate detected for 'Sameer'.
@@ -265,7 +270,7 @@ export default function LandingPage() {
                     <div className="w-full bg-muted rounded-full h-1.5 mt-2">
                       <div className="bg-destructive h-1.5 rounded-full w-3/4"></div>
                     </div>
-                  </div>
+                  </motion.div>
                 </motion.div>
               )}
             </div>
