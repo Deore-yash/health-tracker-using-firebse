@@ -1,20 +1,21 @@
 import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
-import { Inter, Poppins } from 'next/font/google';
+import { Belleza, PT_Sans } from 'next/font/google';
 import { FirebaseClientProvider } from '@/firebase';
 
-const inter = Inter({
+const ptSans = PT_Sans({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-pt-sans',
+  weight: ['400', '700'],
 });
 
-const poppins = Poppins({
+const belleza = Belleza({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-poppins',
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-belleza',
+  weight: '400',
 });
 
 export const metadata: Metadata = {
@@ -30,7 +31,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${poppins.variable}`}
+      className={`${ptSans.variable} ${belleza.variable}`}
       suppressHydrationWarning
     >
       <body className="font-body antialiased">
