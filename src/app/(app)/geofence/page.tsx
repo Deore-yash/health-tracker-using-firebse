@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -17,11 +19,36 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { geoFences } from '@/lib/data';
+import { motion } from 'framer-motion';
 
 export default function GeoFencePage() {
+  const containerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: 'spring', stiffness: 100 },
+    },
+  };
+
   return (
-    <div className="grid gap-6 lg:grid-cols-5">
-      <div className="lg:col-span-3">
+    <motion.div
+      className="grid gap-6 lg:grid-cols-5"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div className="lg:col-span-3" variants={itemVariants}>
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">Your Safe Areas</CardTitle>
@@ -50,8 +77,8 @@ export default function GeoFencePage() {
             </Table>
           </CardContent>
         </Card>
-      </div>
-      <div className="lg:col-span-2">
+      </motion.div>
+      <motion.div className="lg:col-span-2" variants={itemVariants}>
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">Add New Area</CardTitle>
@@ -77,7 +104,7 @@ export default function GeoFencePage() {
             </form>
           </CardContent>
         </Card>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

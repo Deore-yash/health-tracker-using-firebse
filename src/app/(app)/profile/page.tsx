@@ -36,6 +36,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import type { UserProfile } from '@/lib/types';
 import { useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 const profileSchema = z.object({
   fullName: z.string().min(1, { message: 'Full name is required' }),
@@ -110,8 +111,31 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-5">
-      <div className="lg:col-span-2">
+    <motion.div
+      className="grid gap-6 lg:grid-cols-5"
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 1 },
+        visible: {
+          opacity: 1,
+          transition: {
+            staggerChildren: 0.1,
+          },
+        },
+      }}
+    >
+      <motion.div
+        className="lg:col-span-2"
+        variants={{
+          hidden: { opacity: 0, x: -20 },
+          visible: {
+            opacity: 1,
+            x: 0,
+            transition: { type: 'spring', stiffness: 100 },
+          },
+        }}
+      >
         <Card>
           <CardHeader className="flex flex-col items-center text-center">
             <Avatar className="h-24 w-24 mb-4">
@@ -136,8 +160,18 @@ export default function ProfilePage() {
             </div>
           </CardContent>
         </Card>
-      </div>
-      <div className="lg:col-span-3">
+      </motion.div>
+      <motion.div
+        className="lg:col-span-3"
+        variants={{
+          hidden: { opacity: 0, x: 20 },
+          visible: {
+            opacity: 1,
+            x: 0,
+            transition: { type: 'spring', stiffness: 100 },
+          },
+        }}
+      >
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">Edit Profile</CardTitle>
@@ -218,7 +252,7 @@ export default function ProfilePage() {
             </Form>
           </CardContent>
         </Card>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

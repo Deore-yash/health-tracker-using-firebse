@@ -18,6 +18,7 @@ import { personalizedHealthAdvice } from '@/ai/flows/personalized-health-advice'
 import { ChatMessage } from './chat-message';
 import type { UserProfile, AiHealthState } from '@/lib/types';
 import { Skeleton } from '../ui/skeleton';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface Message {
   id: number;
@@ -160,11 +161,13 @@ export function ChatLayout() {
   return (
     <div className="flex flex-col h-full rounded-lg border bg-card text-card-foreground">
       <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-        <div className="space-y-4">
-          {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} user={user} />
-          ))}
-        </div>
+        <AnimatePresence>
+          <motion.div className="space-y-4">
+            {messages.map((message) => (
+              <ChatMessage key={message.id} message={message} user={user} />
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </ScrollArea>
       <form onSubmit={handleSend} className="bg-background rounded-b-lg">
           {imagePreview && (

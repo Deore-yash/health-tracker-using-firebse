@@ -212,13 +212,26 @@ export default function LandingPage() {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <div className="flex items-center gap-0.5">
-                      <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                      <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                      <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                      <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                      <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                    </div>
+                    <motion.div
+                      className="flex items-center gap-0.5"
+                      initial="hidden"
+                      animate="visible"
+                      variants={{
+                        visible: { transition: { staggerChildren: 0.1, delayChildren: 0.4 } },
+                      }}
+                    >
+                      {[...Array(5)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          variants={{
+                            hidden: { opacity: 0, y: 10 },
+                            visible: { opacity: 1, y: 0 },
+                          }}
+                        >
+                          <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                        </motion.div>
+                      ))}
+                    </motion.div>
                     <p className="text-sm text-muted-foreground">
                       Trusted by 1,000+ families.
                     </p>

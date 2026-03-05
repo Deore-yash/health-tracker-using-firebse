@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { Icons } from '../icons';
+import { motion } from 'framer-motion';
 
 interface Message {
     id: number;
@@ -16,7 +17,12 @@ interface Message {
 
 export function ChatMessage({ message, user }: { message: Message, user: User | null }) {
     return (
-        <div
+        <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -20 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             className={cn(
                 'flex items-start gap-3',
                 message.isUser && 'justify-end'
@@ -63,6 +69,6 @@ export function ChatMessage({ message, user }: { message: Message, user: User | 
                     </AvatarFallback>
                 </Avatar>
             )}
-        </div>
+        </motion.div>
     );
 }
