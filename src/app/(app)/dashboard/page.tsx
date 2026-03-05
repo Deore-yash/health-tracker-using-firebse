@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { HealthMetricCard } from '@/components/dashboard/health-metric-card';
 import { HealthChart } from '@/components/dashboard/health-chart';
+import { WeeklySummary } from '@/components/dashboard/weekly-summary';
 import { healthMetrics, user, weeklyActivityData } from '@/lib/data';
 
 export default function DashboardPage() {
@@ -73,6 +74,7 @@ export default function DashboardPage() {
           unit=""
           chartType="bar"
         />
+        <WeeklySummary />
       </div>
     </div>
   );
