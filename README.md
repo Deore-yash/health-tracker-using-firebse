@@ -1,4 +1,4 @@
-# Health Tracker
+git # Health Tracker
 
 This is a NextJS starter for a Health Tracker application built in Firebase Studio.
 

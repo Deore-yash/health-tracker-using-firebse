@@ -4,12 +4,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   Bell,
-  LifeBuoy,
   LogOut,
   Search,
   Settings,
   User,
-  ShieldAlert,
 } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -30,17 +28,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { notifications } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth, useUser } from '@/firebase';
@@ -50,14 +37,6 @@ export function Header() {
   const auth = useAuth();
   const { user } = useUser();
   const router = useRouter();
-
-  const handleSos = () => {
-    toast({
-      title: 'SOS Alert Sent!',
-      description: 'Your caregiver and emergency contacts have been notified.',
-      variant: 'destructive',
-    });
-  };
 
   const handleLogout = async () => {
     try {
@@ -89,32 +68,7 @@ export function Header() {
           </div>
         </form>
       </div>
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button variant="ghost" size="icon" className="rounded-full text-destructive hover:bg-destructive/10 hover:text-destructive animate-pulse">
-            <LifeBuoy className="h-6 w-6" />
-            <span className="sr-only">SOS</span>
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2">
-              <ShieldAlert className="h-6 w-6 text-destructive" />
-              Are you sure you want to send an SOS alert?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              This will immediately notify your caregiver and emergency contacts of your current location and situation. Only use this in a genuine emergency.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleSos}>
-              Yes, Send Alert
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
+      
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="ghost" size="icon" className="rounded-full">
