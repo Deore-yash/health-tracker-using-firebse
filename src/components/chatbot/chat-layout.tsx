@@ -48,7 +48,7 @@ export function ChatLayout() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hello! I'm your AI health assistant. How can I help you today? You can ask about symptoms, diet, or general wellness.",
+      text: "Hello! I'm your AI health assistant, powered by Gemini. How can I help you today? You can ask about symptoms, diet, or general wellness.",
       isUser: false,
       user: { name: 'HealthBot', avatar: '/bot-avatar.png' },
     },

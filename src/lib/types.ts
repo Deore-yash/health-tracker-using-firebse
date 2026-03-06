@@ -5,7 +5,11 @@ export type UserProfile = {
   email: string;
   phoneNumber?: string;
   dateOfBirth?: string;
-}
+  address?: string;
+  bloodType?: string;
+  allergies?: string;
+  medicalConditions?: string;
+};
 
 export type MonitoredUser = {
   id: string;
