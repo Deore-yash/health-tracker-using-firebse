@@ -67,13 +67,12 @@ export default function DashboardPage() {
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0, scale: 0.95, rotate: -2 },
+    hidden: { y: 20, opacity: 0, scale: 0.95 },
     visible: {
       y: 0,
       opacity: 1,
       scale: 1,
-      rotate: 0,
-      transition: { type: 'spring', stiffness: 260, damping: 20 },
+      transition: { type: 'spring', stiffness: 150, damping: 20 },
     },
   };
 
@@ -105,25 +104,37 @@ export default function DashboardPage() {
         ))}
       </motion.div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <HealthChart
-          data={weeklyActivity}
-          title="Weekly Activity Level"
-          description="Your average activity over the past week."
-          dataKey="activityLevel"
-          unit="%"
-          chartType="line"
-        />
-        <HealthChart
-          data={weeklyActivity}
-          title="Weekly Steps"
-          description="Your total steps over the past week."
-          dataKey="steps"
-          unit=""
-          chartType="bar"
-        />
-        <WeeklySummary weeklyActivityData={weeklyActivity} />
-      </div>
+      <motion.div
+        className="grid gap-6 md:grid-cols-2"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <motion.div variants={itemVariants}>
+          <HealthChart
+            data={weeklyActivity}
+            title="Weekly Activity Level"
+            description="Your average activity over the past week."
+            dataKey="activityLevel"
+            unit="%"
+            chartType="line"
+          />
+        </motion.div>
+        <motion.div variants={itemVariants}>
+          <HealthChart
+            data={weeklyActivity}
+            title="Weekly Steps"
+            description="Your total steps over the past week."
+            dataKey="steps"
+            unit=""
+            chartType="bar"
+          />
+        </motion.div>
+        <motion.div variants={itemVariants} className="md:col-span-2">
+          <WeeklySummary weeklyActivityData={weeklyActivity} />
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

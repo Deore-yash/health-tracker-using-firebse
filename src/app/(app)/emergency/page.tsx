@@ -86,20 +86,40 @@ export default function EmergencyPage() {
     deleteDocumentNonBlocking(docRef);
   };
 
+  const containerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
+  };
+  
+  const tableContainerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.05 },
+    },
+  };
+
+  const tableItemVariants = {
+    hidden: { y: 10, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 100 } },
+  };
+
   return (
     <motion.div
       className="grid gap-6 lg:grid-cols-5"
       initial="hidden"
       animate="visible"
-      variants={{
-        hidden: { opacity: 1 },
-        visible: {
-          opacity: 1,
-          transition: { staggerChildren: 0.1 },
-        },
-      }}
+      variants={containerVariants}
     >
-      <motion.div className="lg:col-span-3" variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 }}}>
+      <motion.div className="lg:col-span-3" variants={itemVariants}>
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">Emergency Contacts</CardTitle>
@@ -108,13 +128,6 @@ export default function EmergencyPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {isLoading ? (
-                <div className="space-y-2">
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-10 w-full" />
-                </div>
-            ) : (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -124,31 +137,36 @@ export default function EmergencyPage() {
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {contacts && contacts.map((contact) => (
-                  <TableRow key={contact.id}>
-                    <TableCell className="font-medium">{contact.name}</TableCell>
-                    <TableCell>{contact.relationship}</TableCell>
-                    <TableCell>{contact.phoneNumber}</TableCell>
-                    <TableCell className="text-right">
-                        <Button variant="ghost" size="icon" onClick={() => deleteContact(contact.id)}>
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
+              
+              {contacts && contacts.length > 0 ? (
+                <motion.tbody variants={tableContainerVariants}>
+                  {contacts.map((contact) => (
+                    <motion.tr key={contact.id} variants={tableItemVariants}>
+                      <TableCell className="font-medium">{contact.name}</TableCell>
+                      <TableCell>{contact.relationship}</TableCell>
+                      <TableCell>{contact.phoneNumber}</TableCell>
+                      <TableCell className="text-right">
+                          <Button variant="ghost" size="icon" onClick={() => deleteContact(contact.id)}>
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                      </TableCell>
+                    </motion.tr>
+                  ))}
+                </motion.tbody>
+              ) : (
+                <TableBody>
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center text-muted-foreground">
+                      {isLoading ? 'Loading...' : 'No contacts added yet.'}
                     </TableCell>
                   </TableRow>
-                ))}
-                {(!contacts || contacts.length === 0) && (
-                    <TableRow>
-                        <TableCell colSpan={4} className="text-center text-muted-foreground">No contacts added yet.</TableCell>
-                    </TableRow>
-                )}
-              </TableBody>
+                </TableBody>
+              )}
             </Table>
-            )}
           </CardContent>
         </Card>
       </motion.div>
-      <motion.div className="lg:col-span-2" variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 }}}>
+      <motion.div className="lg:col-span-2" variants={itemVariants}>
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">Add New Contact</CardTitle>

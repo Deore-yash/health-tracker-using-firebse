@@ -39,6 +39,10 @@ export function UserTable() {
     visible: {
       y: 0,
       opacity: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+      },
     },
   };
 
@@ -64,7 +68,8 @@ export function UserTable() {
             <motion.tbody
               variants={containerVariants}
               initial="hidden"
-              animate="visible"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
             >
               {monitoredUsers.map((user) => (
                 <motion.tr

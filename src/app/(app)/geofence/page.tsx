@@ -41,7 +41,6 @@ import {
 import { motion } from 'framer-motion';
 import { Trash2 } from 'lucide-react';
 import type { GeoFenceZone } from '@/lib/types';
-import { Skeleton } from '@/components/ui/skeleton';
 
 const geoFenceSchema = z.object({
   name: z.string().min(1, { message: 'Area name is required' }),
@@ -91,6 +90,20 @@ export default function GeoFencePage() {
     visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
   };
 
+  const tableContainerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.05 },
+    },
+  };
+
+  const tableItemVariants = {
+    hidden: { y: 10, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 100 } },
+  };
+
+
   return (
     <motion.div
       className="grid gap-6 lg:grid-cols-5"
@@ -105,12 +118,6 @@ export default function GeoFencePage() {
             <CardDescription>Manage the geo-fenced areas for alerts.</CardDescription>
           </CardHeader>
           <CardContent>
-            {isLoading ? (
-                <div className="space-y-2">
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-10 w-full" />
-                </div>
-            ) : (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -120,27 +127,31 @@ export default function GeoFencePage() {
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {geoFences && geoFences.map((zone) => (
-                  <TableRow key={zone.id}>
-                    <TableCell className="font-medium">{zone.name}</TableCell>
-                    <TableCell>{zone.address}</TableCell>
-                    <TableCell>{zone.radius}m</TableCell>
-                    <TableCell className="text-right">
-                        <Button variant="ghost" size="icon" onClick={() => deleteFence(zone.id)}>
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
+              {geoFences && geoFences.length > 0 ? (
+                <motion.tbody variants={tableContainerVariants}>
+                  {geoFences.map((zone) => (
+                    <motion.tr key={zone.id} variants={tableItemVariants}>
+                      <TableCell className="font-medium">{zone.name}</TableCell>
+                      <TableCell>{zone.address}</TableCell>
+                      <TableCell>{zone.radius}m</TableCell>
+                      <TableCell className="text-right">
+                          <Button variant="ghost" size="icon" onClick={() => deleteFence(zone.id)}>
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                      </TableCell>
+                    </motion.tr>
+                  ))}
+                </motion.tbody>
+              ) : (
+                <TableBody>
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center text-muted-foreground">
+                      {isLoading ? 'Loading...' : 'No safe areas defined.'}
                     </TableCell>
                   </TableRow>
-                ))}
-                 {(!geoFences || geoFences.length === 0) && (
-                    <TableRow>
-                        <TableCell colSpan={4} className="text-center text-muted-foreground">No safe areas defined.</TableCell>
-                    </TableRow>
-                )}
-              </TableBody>
+                </TableBody>
+              )}
             </Table>
-            )}
           </CardContent>
         </Card>
       </motion.div>
