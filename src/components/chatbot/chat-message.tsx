@@ -44,9 +44,9 @@ export function ChatMessage({ message, user }: { message: Message, user: User | 
             >
                 {message.isLoading ? (
                     <div className="flex items-center gap-2">
-                       <Skeleton className="h-3 w-3 rounded-full" />
-                       <Skeleton className="h-3 w-3 rounded-full" />
-                       <Skeleton className="h-3 w-3 rounded-full" />
+                       <Skeleton className="h-3 w-3 rounded-full animate-pulse" style={{ animationDelay: '0s' }} />
+                       <Skeleton className="h-3 w-3 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }} />
+                       <Skeleton className="h-3 w-3 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
                     </div>
                 ) : (
                     <div className="grid gap-2">

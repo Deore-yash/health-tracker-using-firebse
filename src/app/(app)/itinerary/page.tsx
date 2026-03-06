@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -29,7 +30,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-
 import { cn } from '@/lib/utils';
 import type { Itinerary } from '@/lib/types';
 import { CheckCircle2, Circle, Plus, Radio } from 'lucide-react';
@@ -176,7 +176,7 @@ export default function ItineraryPage() {
             animate="visible"
           >
             {itinerary && itinerary.length > 0 ? (
-              itinerary.map((item) => (
+              itinerary.sort((a, b) => a.time.localeCompare(b.time)).map((item) => (
               <motion.div
                 key={item.id}
                 variants={itemVariants}
