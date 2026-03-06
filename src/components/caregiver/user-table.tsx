@@ -41,7 +41,8 @@ export function UserTable() {
       opacity: 1,
       transition: {
         type: 'spring',
-        stiffness: 100,
+        stiffness: 260,
+        damping: 20
       },
     },
   };
@@ -75,7 +76,7 @@ export function UserTable() {
                 <motion.tr
                   key={user.id}
                   variants={itemVariants}
-                  className="transition-all hover:bg-muted/50 hover:shadow-md"
+                  whileHover={{ backgroundColor: 'hsl(var(--muted))' }}
                 >
                   <TableCell>
                     <div className="flex items-center gap-3">
@@ -105,14 +106,18 @@ export function UserTable() {
                   </TableCell>
                   <TableCell>{user.currentActivity}</TableCell>
                   <TableCell className="text-right space-x-2">
-                    <Button variant="outline" size="sm">
-                      <Activity className="mr-2 h-4 w-4" />
-                      View Details
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <MapPin className="mr-2 h-4 w-4" />
-                      Live Location
-                    </Button>
+                    <motion.div className="inline-block" whileTap={{ scale: 0.95 }}>
+                      <Button variant="outline" size="sm">
+                        <Activity className="mr-2 h-4 w-4" />
+                        View Details
+                      </Button>
+                    </motion.div>
+                     <motion.div className="inline-block" whileTap={{ scale: 0.95 }}>
+                      <Button variant="outline" size="sm">
+                        <MapPin className="mr-2 h-4 w-4" />
+                        Live Location
+                      </Button>
+                    </motion.div>
                   </TableCell>
                 </motion.tr>
               ))}

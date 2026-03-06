@@ -72,7 +72,7 @@ export default function DashboardPage() {
       y: 0,
       opacity: 1,
       scale: 1,
-      transition: { type: 'spring', stiffness: 150, damping: 20 },
+      transition: { type: 'spring', stiffness: 260, damping: 20 },
     },
   };
 
@@ -98,6 +98,7 @@ export default function DashboardPage() {
             key={metric.id}
             variants={itemVariants}
             whileHover={{ scale: 1.05, y: -5, transition: { type: 'spring', stiffness: 300 } }}
+            whileTap={{ scale: 0.98, y: 0 }}
           >
             <HealthMetricCard metric={metric} />
           </motion.div>

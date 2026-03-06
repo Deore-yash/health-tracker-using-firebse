@@ -133,9 +133,11 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? 'Logging in...' : 'Login'}
-              </Button>
+              <motion.div whileTap={{ scale: 0.95 }}>
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? 'Logging in...' : 'Login'}
+                </Button>
+              </motion.div>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">

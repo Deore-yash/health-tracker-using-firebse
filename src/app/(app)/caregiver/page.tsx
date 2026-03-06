@@ -30,7 +30,7 @@ export default function CaregiverPage() {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: 'spring', stiffness: 100 },
+      transition: { type: 'spring', stiffness: 260, damping: 20 },
     },
   };
 
@@ -62,8 +62,9 @@ export default function CaregiverPage() {
                 key={guide.id}
                 variants={itemVariants}
                 whileHover={{ y: -5, scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
                 transition={{ type: 'spring', stiffness: 300 }}
-                className="flex items-center justify-between space-x-4 rounded-md border p-4 transition-shadow hover:shadow-lg"
+                className="flex items-center justify-between space-x-4 rounded-md border p-4 shadow-sm"
               >
                 <div className="flex items-center space-x-4">
                   <Avatar>
@@ -79,7 +80,9 @@ export default function CaregiverPage() {
                     </p>
                   </div>
                 </div>
-                <Button variant="outline" size="sm">Remove</Button>
+                <motion.div whileTap={{ scale: 0.95 }}>
+                  <Button variant="outline" size="sm">Remove</Button>
+                </motion.div>
               </motion.div>
             ))}
           </motion.div>

@@ -98,7 +98,7 @@ export default function ItineraryPage() {
 
   const itemVariants = {
     hidden: { x: -20, opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 100 } },
+    visible: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 260, damping: 20 } },
   };
 
   return (
@@ -118,9 +118,9 @@ export default function ItineraryPage() {
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" /> Add Event
-              </Button>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" /> Add Event
+                </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -156,7 +156,9 @@ export default function ItineraryPage() {
                       <FormMessage />
                     </FormItem>
                   )} />
-                  <Button type="submit" disabled={form.formState.isSubmitting}>Add to Schedule</Button>
+                   <motion.div whileTap={{ scale: 0.95 }}>
+                    <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>Add to Schedule</Button>
+                  </motion.div>
                 </form>
               </Form>
             </DialogContent>
@@ -181,7 +183,8 @@ export default function ItineraryPage() {
               <motion.div
                 key={item.id}
                 variants={itemVariants}
-                className="grid gap-2 mb-8 pl-8 relative transition-all hover:bg-muted/50 -ml-8 p-2 rounded-md"
+                whileHover={{ backgroundColor: "hsl(var(--muted))" }}
+                className="grid gap-2 mb-8 pl-8 relative -ml-8 p-2 rounded-md"
               >
                 <div className="flex items-center gap-4">
                   <div className="absolute -left-[13px] top-1.5 flex items-center justify-center bg-background rounded-full">
