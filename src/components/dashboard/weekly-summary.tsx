@@ -25,8 +25,8 @@ import {
   FormLabel,
 } from '@/components/ui/form';
 import { summarizeHealthData } from '@/ai/flows/summarize-health-data';
-import { weeklyActivityData } from '@/lib/data';
 import { Skeleton } from '../ui/skeleton';
+import type { DailyActivityData } from '@/lib/types';
 
 const insights = [
   { id: 'heartRate', label: 'Heart Rate Trends' },
@@ -41,7 +41,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function WeeklySummary() {
+export function WeeklySummary({ weeklyActivityData }: { weeklyActivityData: DailyActivityData[] }) {
   const [summary, setSummary] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -146,7 +146,7 @@ export function WeeklySummary() {
             )}
           </CardContent>
           <CardFooter>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading || weeklyActivityData.length === 0}>
               {isLoading ? 'Generating...' : 'Generate Summary'}
             </Button>
           </CardFooter>

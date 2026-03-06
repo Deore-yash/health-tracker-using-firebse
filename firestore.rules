@@ -153,6 +153,18 @@ service cloud.firestore {
       allow update: if isExistingOwner(userId) && isSubcollectionDataImmutable();
       allow delete: if isExistingOwner(userId);
     }
+    
+    /**
+     * @description A user's collection of itinerary items.
+     * @path /users/{userId}/itinerary/{itineraryId}
+     * @principle Enforces document ownership for all operations within a user's private subcollection.
+     */
+    match /users/{userId}/itinerary/{itineraryId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && hasValidSubcollectionDataOnCreate(userId);
+      allow update: if isExistingOwner(userId) && isSubcollectionDataImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
 
     /**
      * @description A user's singleton AI health state document.

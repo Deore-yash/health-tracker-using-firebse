@@ -227,6 +227,48 @@
         "timestamp",
         "acknowledged"
       ]
+    },
+    "Itinerary": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Itinerary",
+      "type": "object",
+      "description": "Represents a scheduled event or activity for a user.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string",
+          "format": "time"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "completed",
+            "upcoming",
+            "ongoing"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "time",
+        "title",
+        "status"
+      ]
     }
   },
   "auth": {
@@ -345,6 +387,26 @@
             {
               "name": "alertId",
               "description": "The unique identifier for the alert."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/itinerary/{itineraryId}",
+        "definition": {
+          "entityName": "Itinerary",
+          "schema": {
+            "$ref": "#/backend/entities/Itinerary"
+          },
+          "description": "Stores itinerary/schedule items for a user. This collection uses path-based ownership. No denormalization required.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "itineraryId",
+              "description": "The unique identifier for the itinerary item."
             }
           ]
         }

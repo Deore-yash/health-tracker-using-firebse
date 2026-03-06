@@ -9,6 +9,7 @@ import {
   Settings,
   User,
 } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -28,15 +29,25 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { notifications } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth, useUser } from '@/firebase';
+import { useAuth, useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, query, orderBy, limit } from 'firebase/firestore';
+import type { Alert } from '@/lib/types';
+import { Skeleton } from '../ui/skeleton';
 
 export function Header() {
   const { toast } = useToast();
   const auth = useAuth();
   const { user } = useUser();
+  const firestore = useFirestore();
   const router = useRouter();
+
+  const alertsRef = useMemoFirebase(() => {
+    if (!user || !firestore) return null;
+    return query(collection(firestore, 'users', user.uid, 'alerts'), orderBy('timestamp', 'desc'), limit(5));
+  }, [user, firestore]);
+
+  const { data: alerts, isLoading } = useCollection<Alert>(alertsRef);
 
   const handleLogout = async () => {
     try {
@@ -73,6 +84,12 @@ export function Header() {
         <PopoverTrigger asChild>
           <Button variant="ghost" size="icon" className="rounded-full">
             <Bell className="h-5 w-5" />
+            {alerts && alerts.length > 0 && (
+              <span className="absolute top-1 right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+              </span>
+            )}
             <span className="sr-only">Toggle notifications</span>
           </Button>
         </PopoverTrigger>
@@ -81,27 +98,31 @@ export function Header() {
             <div className="space-y-2">
               <h4 className="font-medium leading-none">Notifications</h4>
               <p className="text-sm text-muted-foreground">
-                You have {notifications.length} new messages.
+                You have {alerts?.length ?? 0} new messages.
               </p>
             </div>
             <div className="grid gap-2">
-              {notifications.map((notification) => (
+              {isLoading && <Skeleton className="h-20 w-full" />}
+              {alerts && alerts.map((notification) => (
                 <div
                   key={notification.id}
                   className="grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
                 >
                   <span className="flex h-2 w-2 translate-y-1 rounded-full bg-primary" />
                   <div className="grid gap-1">
-                    <p className="text-sm font-medium">{notification.title}</p>
+                    <p className="text-sm font-medium">{notification.type}</p>
                     <p className="text-sm text-muted-foreground">
-                      {notification.description}
+                      {notification.message}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {notification.timestamp}
+                      {formatDistanceToNow(new Date(notification.timestamp), { addSuffix: true })}
                     </p>
                   </div>
                 </div>
               ))}
+              {!isLoading && (!alerts || alerts.length === 0) && (
+                <p className="text-sm text-muted-foreground text-center">No new notifications.</p>
+              )}
             </div>
           </div>
         </PopoverContent>

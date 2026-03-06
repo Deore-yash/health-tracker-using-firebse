@@ -1,92 +1,198 @@
-'use client';
+/**
+ * Core Philosophy: This ruleset enforces a strict user-ownership model for all user-specific data.
+ * All user-generated content is stored in subcollections under a document corresponding to the
+ * user's unique ID (UID). A user can only access and manage data located within their own data tree.
+ *
+ * Data Structure:
+ * - /users/{userId}: User-specific data tree. Each user has their own set of subcollections.
+ *
+ * Key Security Decisions:
+ * - User data is private: Access to any path under /users/{userId} is restricted to the
+ *   authenticated user whose UID matches {userId}.
+ * - No global access: There are no admin roles or public collections defined without rules.
+ *   All access is based on user ownership.
+ * - User privacy: Listing the top-level /users collection is explicitly disallowed to prevent
+ *   leaking a list of all application users.
+ *
+ * Denormalization for Authorization: This ruleset relies on path-based authorization. By placing
+ * all of a user's data under `/users/{userId}`, we avoid slow and costly `get()` calls to other
+ * documents for authorization, which is a key performance and security best practice.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
 
-import { UserTable } from '@/components/caregiver/user-table';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { caregivers } from '@/lib/data';
-import { motion } from 'framer-motion';
+    // ------------------------------------------------------------------------
+    // Helper Functions
+    // ------------------------------------------------------------------------
 
-export default function CaregiverPage() {
-  const containerVariants = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
+    /**
+     * Checks if a user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { type: 'spring', stiffness: 300, damping: 30 },
-    },
-  };
+    /**
+     * Checks if the currently signed-in user is the owner of the document,
+     * based on the userId in the path.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
 
-  return (
-    <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="text-3xl font-headline font-bold">Caregiver Dashboard</h1>
-        <p className="text-muted-foreground">
-          Monitor users and manage your caregiver team.
-        </p>
-      </div>
+    /**
+     * Checks if a document exists and the current user is its owner.
+     * CRITICAL for safe update and delete operations.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Your Caregiver Team</CardTitle>
-          <CardDescription>
-            These people are assigned to your monitored users.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <motion.div
-            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {caregivers.map((guide) => (
-              <motion.div
-                key={guide.id}
-                variants={itemVariants}
-                whileHover={{ y: -5 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className="flex items-center justify-between space-x-4 rounded-md border p-4 transition-shadow hover:shadow-lg"
-              >
-                <div className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarImage src={guide.avatar} />
-                    <AvatarFallback>{guide.name?.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium leading-none">
-                      {guide.name}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {guide.email}
-                    </p>
-                  </div>
-                </div>
-                <Button variant="outline" size="sm">Remove</Button>
-              </motion.div>
-            ))}
-          </motion.div>
-        </CardContent>
-      </Card>
-      
-      <UserTable />
+    /**
+     * Validates that the UserProfile document being created contains an 'id'
+     * field that matches the user's auth UID from the path.
+     */
+    function hasValidProfileDataOnCreate(userId) {
+      return request.resource.data.id == userId;
+    }
 
-    </div>
-  );
+    /**
+     * Ensures the 'id' field of a UserProfile document cannot be changed
+     * after creation, preserving the ownership link.
+     */
+    function isProfileDataImmutable() {
+      return request.resource.data.id == resource.data.id;
+    }
+
+    /**
+     * Validates that a subcollection document being created (e.g., ActivityData)
+     * contains a 'userId' field matching the user's auth UID from the path.
+     */
+    function hasValidSubcollectionDataOnCreate(userId) {
+      return request.resource.data.userId == userId;
+    }
+
+    /**
+     * Ensures the 'userId' field of a subcollection document cannot be changed
+     * after creation, preserving the ownership link.
+     */
+    function isSubcollectionDataImmutable() {
+      return request.resource.data.userId == resource.data.userId;
+    }
+
+
+    // ------------------------------------------------------------------------
+    // Collection Rules
+    // ------------------------------------------------------------------------
+
+    /**
+     * @description Top-level user collection. Direct access is denied to protect privacy.
+     * @path /users/{userId}
+     * @allow (none) - No direct reads or writes on the user document itself.
+     * @deny (list) - An unauthenticated user tries to list all users.
+     * @principle Prevents enumeration of all users in the application.
+     */
+    match /users/{userId} {
+      allow get, list, create, update, delete: if false;
+    }
+
+    /**
+     * @description A user's own profile document.
+     * @path /users/{userId}/profile/data
+     * @allow (create) - A new user `auth.uid: 'user123'` creates their own profile at `/users/user123/profile/data`.
+     * @deny (update) - User `auth.uid: 'user456'` tries to update the profile for `user123`.
+     * @principle Restricts access to a user's own data tree and validates relational integrity on create/update.
+     */
+    match /users/{userId}/profile/data {
+      allow get: if isOwner(userId);
+      allow list: if false; // This is a specific document, not a collection to be listed.
+      allow create: if isOwner(userId) && hasValidProfileDataOnCreate(userId);
+      allow update: if isExistingOwner(userId) && isProfileDataImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description A user's collection of activity data records.
+     * @path /users/{userId}/activityData/{activityDataId}
+     * @allow (list) - User `auth.uid: 'user123'` lists all their activity data at `/users/user123/activityData`.
+     * @deny (get) - User `auth.uid: 'user456'` tries to read an activity record from `/users/user123/activityData/recordxyz`.
+     * @principle Enforces document ownership for all operations within a user's private subcollection.
+     */
+    match /users/{userId}/activityData/{activityDataId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && hasValidSubcollectionDataOnCreate(userId);
+      allow update: if isExistingOwner(userId) && isSubcollectionDataImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description A user's collection of defined geo-fences.
+     * @path /users/{userId}/geoFences/{geoFenceId}
+     * @allow (create) - User `auth.uid: 'user123'` creates a new geo-fence with `userId: 'user123'` in the document body.
+     * @deny (create) - User `auth.uid: 'user123'` tries to create a geo-fence with `userId: 'user456'` in the document body.
+     * @principle Validates relational integrity by ensuring the document's `userId` field matches the path.
+     */
+    match /users/{userId}/geoFences/{geoFenceId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && hasValidSubcollectionDataOnCreate(userId);
+      allow update: if isExistingOwner(userId) && isSubcollectionDataImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description A user's collection of emergency contacts.
+     * @path /users/{userId}/emergencyContacts/{emergencyContactId}
+     * @allow (delete) - User `auth.uid: 'user123'` deletes their own emergency contact document.
+     * @deny (update) - User `auth.uid: 'user123'` tries to update a contact for a non-existent user.
+     * @principle Restricts access to a user's own data tree and ensures operations only affect existing documents.
+     */
+    match /users/{userId}/emergencyContacts/{emergencyContactId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && hasValidSubcollectionDataOnCreate(userId);
+      allow update: if isExistingOwner(userId) && isSubcollectionDataImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
+    
+    /**
+     * @description A user's collection of itinerary items.
+     * @path /users/{userId}/itinerary/{itineraryId}
+     * @principle Enforces document ownership for all operations within a user's private subcollection.
+     */
+    match /users/{userId}/itinerary/{itineraryId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && hasValidSubcollectionDataOnCreate(userId);
+      allow update: if isExistingOwner(userId) && isSubcollectionDataImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description A user's singleton AI health state document.
+     * @path /users/{userId}/aiHealthState/data
+     * @allow (get) - User `auth.uid: 'user123'` reads their own AI state at `/users/user123/aiHealthState/data`.
+     * @deny (create) - User `auth.uid: 'user456'` tries to create an AI state for `user123`.
+     * @principle Enforces document ownership for a singleton document within a user's data tree.
+     */
+    match /users/{userId}/aiHealthState/data {
+      allow get: if isOwner(userId);
+      allow list: if false; // This is a specific document, not a collection to be listed.
+      allow create: if isOwner(userId) && hasValidSubcollectionDataOnCreate(userId);
+      allow update: if isExistingOwner(userId) && isSubcollectionDataImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description A user's collection of alerts.
+     * @path /users/{userId}/alerts/{alertId}
+     * @allow (update) - User `auth.uid: 'user123'` updates an existing alert to acknowledge it.
+     * @deny (delete) - An unauthenticated user tries to delete an alert.
+     * @principle Restricts access to a user's own data tree and requires authentication for all actions.
+     */
+    match /users/{userId}/alerts/{alertId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && hasValidSubcollectionDataOnCreate(userId);
+      allow update: if isExistingOwner(userId) && isSubcollectionDataImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
+  }
 }

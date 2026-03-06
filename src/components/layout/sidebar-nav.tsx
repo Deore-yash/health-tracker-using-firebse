@@ -6,7 +6,7 @@ import {
   LayoutDashboard,
   MapPin,
   MessageCircle,
-  Users,
+  HeartHandshake,
   LogOut,
   ListChecks,
 } from 'lucide-react';
@@ -48,9 +48,9 @@ const links = [
     label: 'AI Assistant',
   },
   {
-    href: '/caregiver',
-    icon: Users,
-    label: 'Caregivers',
+    href: '/emergency',
+    icon: HeartHandshake,
+    label: 'Emergency',
   },
 ];
 

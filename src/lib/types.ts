@@ -34,17 +34,20 @@ export type HealthMetric = {
 export type ActivityData = {
   activityLevel: number;
   steps: number;
+  timestamp: string;
 };
 
 export type DailyActivityData = {
   day: string;
 } & ActivityData;
 
-export type Notification = {
+export type Alert = {
   id: string;
-  title: string;
-  description: string;
+  userId: string;
+  type: string;
+  message: string;
   timestamp: string;
+  acknowledged: boolean;
 };
 
 export type GeoFenceZone = {
@@ -54,8 +57,9 @@ export type GeoFenceZone = {
   radius: number; // in meters
 };
 
-export type ItineraryItem = {
+export type Itinerary = {
   id: string;
+  userId: string;
   time: string;
   title: string;
   description: string;
@@ -69,3 +73,11 @@ export type AiHealthState = {
   state: string;
   lastUpdated: string;
 };
+
+export type EmergencyContact = {
+  id: string;
+  userId: string;
+  name: string;
+  phoneNumber: string;
+  relationship: string;
+}
