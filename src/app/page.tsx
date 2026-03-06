@@ -17,7 +17,13 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Icons } from '@/components/icons';
-import { ArrowRight, Star } from 'lucide-react';
+import {
+  ArrowRight,
+  Star,
+  Activity,
+  MessageCircle,
+  ShieldAlert,
+} from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -42,6 +48,27 @@ const formSchema = z.object({
 });
 
 type SignupFormValues = z.infer<typeof formSchema>;
+
+const featureCards = [
+  {
+    icon: Activity,
+    title: 'Real-time Tracking',
+    description:
+      'Monitor vital health metrics like heart rate and steps throughout the day.',
+  },
+  {
+    icon: MessageCircle,
+    title: 'AI Health Assistant',
+    description:
+      'Get personalized health advice and answers from our intelligent chatbot.',
+  },
+  {
+    icon: ShieldAlert,
+    title: 'Instant Alerts',
+    description:
+      'Receive immediate notifications for geo-fence breaches and health anomalies.',
+  },
+];
 
 export default function LandingPage() {
   const heroImage = PlaceHolderImages.find((img) => img.id === 'hero-image-1');
@@ -95,7 +122,13 @@ export default function LandingPage() {
             phoneNumber: '',
           };
 
-          const userDocRef = doc(firestore, 'users', user.uid, 'profile', 'data');
+          const userDocRef = doc(
+            firestore,
+            'users',
+            user.uid,
+            'profile',
+            'data'
+          );
           setDocumentNonBlocking(userDocRef, userProfile, { merge: true });
 
           const aiHealthStateRef = doc(
@@ -127,66 +160,95 @@ export default function LandingPage() {
     }
   };
 
+  const FADE_IN_UP_VARIANTS = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number = 0) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.5,
+        ease: 'easeInOut',
+      },
+    }),
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <header className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center">
-        <Link href="/" className="flex items-center gap-2">
-          <Icons.logo className="h-8 w-auto text-primary" />
-          <span className="font-headline text-2xl font-bold text-foreground">
-            Health Tracker
-          </span>
-        </Link>
-        <nav className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" asChild>
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/signup">
-              Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </nav>
-      </header>
+      <motion.header
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: { transition: { staggerChildren: 0.1 } },
+        }}
+        className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between"
+      >
+        <motion.div variants={FADE_IN_UP_VARIANTS}>
+          <Link href="/" className="flex items-center gap-2">
+            <Icons.logo className="h-8 w-auto text-primary" />
+            <span className="font-headline text-2xl font-bold text-foreground">
+              Health Tracker
+            </span>
+          </Link>
+        </motion.div>
+        <motion.nav
+          className="flex items-center gap-2"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } },
+          }}
+        >
+          <motion.div variants={FADE_IN_UP_VARIANTS}>
+            <Button variant="ghost" asChild>
+              <Link href="/login">Login</Link>
+            </Button>
+          </motion.div>
+          <motion.div variants={FADE_IN_UP_VARIANTS}>
+            <Button asChild>
+              <Link href="#register">
+                Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </motion.div>
+        </motion.nav>
+      </motion.header>
       <main className="flex-grow">
-        <section className="relative w-full py-20 md:py-32 lg:py-40">
+        <section className="relative w-full py-20 md:py-32 lg:py-40 overflow-hidden">
           <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/10 to-transparent"></div>
           <div className="container px-4 md:px-6">
             <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
               <div className="flex flex-col justify-center space-y-6">
-                <motion.div 
+                <motion.div
                   className="space-y-4"
                   initial="hidden"
                   animate="visible"
                   variants={{
-                    visible: { transition: { staggerChildren: 0.1 } }
+                    visible: { transition: { staggerChildren: 0.2 } },
                   }}
                 >
-                  <motion.h1 
-                    variants={{
-                      hidden: { opacity: 0, y: 20 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-                    }}
+                  <motion.h1
+                    variants={FADE_IN_UP_VARIANTS}
                     className="text-4xl font-headline font-extrabold tracking-tighter sm:text-5xl md:text-6xl xl:text-7xl/none text-foreground"
                   >
                     Your Health,
                     <br />
                     <span className="text-primary">Monitored.</span>
                   </motion.h1>
-                  <motion.p 
-                    variants={{
-                      hidden: { opacity: 0, y: 20 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.1 } }
-                    }}
+                  <motion.p
+                    variants={FADE_IN_UP_VARIANTS}
                     className="max-w-[600px] text-muted-foreground md:text-xl"
                   >
-                    Health Tracker is the all-in-one platform for personal and caregiver health monitoring. Ensure well-being with real-time tracking,
-                    AI assistance, and instant alerts.
+                    Health Tracker is the all-in-one platform for personal and
+                    caregiver health monitoring. Ensure well-being with
+                    real-time tracking, AI assistance, and instant alerts.
                   </motion.p>
                 </motion.div>
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
+                <motion.div
+                  custom={2}
+                  initial="hidden"
+                  animate="visible"
+                  variants={FADE_IN_UP_VARIANTS}
                   className="flex items-center gap-4"
                 >
                   <div className="flex items-center -space-x-2">
@@ -213,35 +275,37 @@ export default function LandingPage() {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <motion.div
-                      className="flex items-center gap-0.5"
-                      initial="hidden"
-                      animate="visible"
-                      variants={{
-                        visible: { transition: { staggerChildren: 0.1, delayChildren: 0.4 } },
-                      }}
-                    >
+                    <div className="flex items-center gap-0.5">
                       {[...Array(5)].map((_, i) => (
                         <motion.div
                           key={i}
-                          variants={{
-                            hidden: { opacity: 0, y: 10 },
-                            visible: { opacity: 1, y: 0 },
+                          custom={i}
+                          initial={{ opacity: 0, y: 10, scale: 0.5 }}
+                          animate={{
+                            opacity: 1,
+                            y: 0,
+                            scale: 1,
+                            transition: {
+                              delay: 0.5 + i * 0.1,
+                              type: 'spring',
+                              stiffness: 200,
+                            },
                           }}
                         >
                           <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                         </motion.div>
                       ))}
-                    </motion.div>
+                    </div>
                     <p className="text-sm text-muted-foreground">
                       Trusted by 1,000+ families.
                     </p>
                   </div>
                 </motion.div>
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
+                <motion.div
+                  custom={3}
+                  initial="hidden"
+                  animate="visible"
+                  variants={FADE_IN_UP_VARIANTS}
                   className="flex flex-col gap-2 min-[400px]:flex-row"
                 >
                   <Button
@@ -257,12 +321,12 @@ export default function LandingPage() {
                 </motion.div>
               </div>
               {heroImage && (
-                 <motion.div 
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
-                    className="relative group"
-                  >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, x: 50 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
+                  className="relative group"
+                >
                   <Image
                     src={heroImage.imageUrl}
                     width={600}
@@ -271,10 +335,14 @@ export default function LandingPage() {
                     data-ai-hint={heroImage.imageHint}
                     className="mx-auto aspect-square overflow-hidden rounded-xl object-cover transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl"
                   />
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 20, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.5, ease: 'easeOut', delay: 0.5 }}
+                    transition={{
+                      duration: 0.5,
+                      ease: 'easeOut',
+                      delay: 0.7,
+                    }}
                     className="absolute -bottom-4 -right-4 w-48 rounded-lg bg-card p-4 shadow-lg border transition-all duration-300 group-hover:scale-105"
                   >
                     <h4 className="font-semibold text-sm">Real-time Alerts</h4>
@@ -290,7 +358,58 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section id="register" className="w-full py-20 md:py-32 lg:py-40 bg-muted/40">
+
+        <section id="features" className="w-full py-20 md:py-32 lg:py-40">
+          <div className="container px-4 md:px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.5 }}
+              className="text-center space-y-4 mb-16"
+            >
+              <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                Everything You Need, All in One Place
+              </h2>
+              <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed">
+                Our platform provides comprehensive tools to ensure the safety
+                and well-being of your loved ones.
+              </p>
+            </motion.div>
+            <motion.div
+              className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={{
+                visible: { transition: { staggerChildren: 0.2 } },
+              }}
+            >
+              {featureCards.map((feature, i) => (
+                <motion.div key={i} custom={i} variants={FADE_IN_UP_VARIANTS}>
+                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                    <CardHeader className="flex flex-row items-center gap-4">
+                      <div className="bg-primary/10 p-3 rounded-full">
+                        <feature.icon className="w-6 h-6 text-primary" />
+                      </div>
+                      <CardTitle>{feature.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground">
+                        {feature.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        <section
+          id="register"
+          className="w-full py-20 md:py-32 lg:py-40 bg-muted/40"
+        >
           <div className="container px-4 md:px-6">
             <motion.div
               className="max-w-xl mx-auto"
@@ -306,7 +425,8 @@ export default function LandingPage() {
                     Get Started with Health Tracker
                   </CardTitle>
                   <CardDescription>
-                    Create your account in seconds and start monitoring your health.
+                    Create your account in seconds and start monitoring your
+                    health.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
