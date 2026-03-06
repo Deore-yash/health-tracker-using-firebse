@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -97,7 +98,7 @@ export default function ItineraryPage() {
 
   const itemVariants = {
     hidden: { x: -20, opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { ease: 'easeOut', duration: 0.4 } },
+    visible: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 100 } },
   };
 
   return (

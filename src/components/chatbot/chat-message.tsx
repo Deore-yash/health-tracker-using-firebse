@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import type { User } from 'firebase/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
