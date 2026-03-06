@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useUser } from '@/firebase';
 import { Header } from '@/components/layout/header';
@@ -32,6 +32,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { toast } = useToast();
+  const constraintsRef = useRef(null);
 
   const handleSos = () => {
     toast({
@@ -82,7 +83,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Sidebar>
         <SidebarNav />
       </Sidebar>
-      <SidebarInset>
+      <SidebarInset ref={constraintsRef}>
         <div className="flex flex-col min-h-screen">
           <Header />
           <AnimatePresence mode="wait">
@@ -98,44 +99,46 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </motion.main>
           </AnimatePresence>
         </div>
-        <div className="fixed bottom-8 right-8 z-50">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <motion.div
+              drag
+              dragConstraints={constraintsRef}
+              dragMomentum={false}
+              className="fixed bottom-8 right-8 z-50 cursor-grab active:cursor-grabbing"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95, cursor: 'grabbing' }}
+              transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+            >
+              <Button
+                variant="destructive"
+                className="h-16 w-16 rounded-full p-0 shadow-2xl animate-pulse focus-visible:ring-4 focus-visible:ring-destructive/30"
               >
-                <Button
-                  variant="destructive"
-                  className="h-16 w-16 rounded-full p-0 shadow-2xl animate-pulse focus-visible:ring-4 focus-visible:ring-destructive/30"
-                >
-                  <LifeBuoy className="h-8 w-8" />
-                  <span className="sr-only">SOS</span>
-                </Button>
-              </motion.div>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle className="flex items-center gap-2">
-                  <ShieldAlert className="h-6 w-6 text-destructive" />
-                  Are you sure you want to send an SOS alert?
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will immediately notify your caregiver and emergency
-                  contacts of your current location and situation. Only use
-                  this in a genuine emergency.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleSos}>
-                  Yes, Send Alert
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
+                <LifeBuoy className="h-8 w-8" />
+                <span className="sr-only">SOS</span>
+              </Button>
+            </motion.div>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="flex items-center gap-2">
+                <ShieldAlert className="h-6 w-6 text-destructive" />
+                Are you sure you want to send an SOS alert?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                This will immediately notify your caregiver and emergency
+                contacts of your current location and situation. Only use
+                this in a genuine emergency.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleSos}>
+                Yes, Send Alert
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </SidebarInset>
     </SidebarProvider>
   );
