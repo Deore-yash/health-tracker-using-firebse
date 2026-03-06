@@ -1,3 +1,4 @@
+
 'use client';
 
 import { motion } from 'framer-motion';
@@ -66,12 +67,13 @@ export default function DashboardPage() {
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0, scale: 0.98 },
+    hidden: { y: 20, opacity: 0, scale: 0.95, rotate: -2 },
     visible: {
       y: 0,
       opacity: 1,
       scale: 1,
-      transition: { type: 'spring', stiffness: 300, damping: 20 },
+      rotate: 0,
+      transition: { type: 'spring', stiffness: 260, damping: 20 },
     },
   };
 
